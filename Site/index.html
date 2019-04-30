@@ -4,60 +4,9 @@
     <meta charset="utf-8">
     <title></title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="./template.js" charset="utf-8"></script>
     <script src="./Caesar_cipher.js" charset="utf-8"></script>
-    <link rel="import" href="template.html">
-    <script type="text/x-template" id="Caesar_cipher">
-      <div class="posts-tab">
-        <ul class="posts-sidebar">
-          <li
-            v-for="theme in themes"
-            v-bind:key="theme.id"
-            v-bind:class="{ selected: theme === selectedTheme }"
-            v-on:click="selectedTheme = theme"
-          >
-            {{ theme.title }}
-          </li>
-        </ul>
-        <div class="selected-post-container">
-          <h3>{{ title }}</h3>
-          <div
-            v-if="selectedTheme"
-            class="selected-post"
-          >
-            <h4>{{ selectedTheme.subtitle }}</h4>
-            <description>
-              {{ selectedTheme.description }}
-            </description>
-            <exercise>
-              {{ selectedTheme.exercise }}
-            </exercise>
-          </div>
-          <strong v-else>
-            Click on a blog title to the left to view it.
-          </strong>
-          <documentation>
-            {{ documentation }}
-          </documentation>
-        </div>
-      </div>
-    </script>
-    <script type="text/x-template" id="description">
-      <div>
-        <slot></slot>
-      </div>
-    </script>
-
-    <script type="text/x-template" id="exercise">
-      <div>
-        <slot></slot>
-      </div>
-    </script>
-    <script type="text/x-template" id="documentation">
-      <div>
-        <slot></slot>
-      </div>
-    </script>
-    <style media="screen">
+    <!--<style media="screen">
 
       .tab-button {
         padding: 6px 10px;
@@ -108,23 +57,29 @@
         margin-top: 0;
         padding-top: 0;
       }
-    </style>
+    </style>-->
   </head>
   <body>
-    <div id="dynamic-component-demo">
-      <button
-        v-for="tab in tabs"
-        v-bind:key="tab"
-        v-bind:class="['tab-button', { active: currentTab === tab }]"
-        v-on:click="currentTab = tab"
-      >{{ tab }}</button>
-
-      <keep-alive>
+    <div id="main">
+        <ul>
+          <li
+            v-for="tab in tabs"
+            v-bind:key="tab"
+            v-bind:class="['tab-button', { active: currentTab === tab }]"
+            v-on:click="currentTab = tab"
+          >{{ tab }}
+              <component
+                    v-if='currentTab==tab'
+                    v-bind:is="currentTabComponent"
+                    v-bind:liste='true'
+                ></component>
+            </li>
+        </ul>
         <component
           v-bind:is="currentTabComponent"
+            v-bind:liste='false'
           class="tab"
         ></component>
-      </keep-alive>
 
     </div>
     <script type="text/javascript">
@@ -161,75 +116,14 @@
 
         template: `<p><slot></slot></p>`
       });
-      Vue.component('tab-posts', {
-        data: function () {
-          return {
-            themes: [
-              {
-                id: 1,
-                title: 'Cat Ipsum',
-                description : "bonjour",
-                exercise: '',
-                documentation:""
-              },
-              {
-                id: 2,
-                title: 'Hipster Ipsum',
-                description : "bonjour",
-                exercise: '',
-                documentation:""
-              },
-              {
-                id: 3,
-                title: 'Cupcake Ipsum',
-                description : "bonjour",
-                exercise: '',
-                documentation:""
-              }
-            ],
-            selectedTheme: null
-          }
-        },
-        template: exercice
-      });
 
-      Vue.component('tab-archive', {
-        data: function () {
-          return {
-            themes: [
-              {
-                id: 1,
-                title: 'Cat Ipsum',
-                description : "bonjour",
-                exercise: '',
-                documentation:""
-              },
-              {
-                id: 2,
-                title: 'Hipster Ipsum',
-                description : "bonjour",
-                exercise: '',
-                documentation:""
-              },
-              {
-                id: 3,
-                title: 'Cupcake Ipsum',
-                description : "bonjour",
-                exercise: '',
-                documentation:""
-              }
-            ],
-            selectedPost: null
-          }
-        },
-        template: exercice
-      });*/
+     */
 
       new Vue({
-        el: '#dynamic-component-demo',
+        el: '#main',
         data: {
           currentTab: 'Caesar_cipher',
-          tabs: ['Caesar_cipher']
+          tabs: ['Caesar_cipher','Vigenere_cipher']
         },
         computed: {
           currentTabComponent: function () {
@@ -239,6 +133,7 @@
       });
     </script>
   </body>
+
 
 
 </html>
