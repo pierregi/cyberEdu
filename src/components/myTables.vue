@@ -3,75 +3,89 @@ export default {
   props: ['teams'],
   data () {
     return {
-      col: 12
+      col: 0
     }
   },
   render: function (createElement) {
     let childNode = []
-    let nb = parseInt((this.teams.length - 3) / 3) + 1
-    let a = nb <= 4 ? nb : 4
+    let nb = Math.ceil(this.teams.length / 3)
+    let a = nb <= 3 ? nb : 3
     switch (a) {
       case 1:
-        this.col = 100
-        break;
+        this.col = 12
+        break
       case 2:
-        this.col = 45
-        break;
-      case 3:
-        this.col = 30
-        break;
+        this.col = 6
+        break
       default:
-        this.col = 20
+        this.col = 4
     }
-    for (let i = 0 ; i < a ; i ++) {
-      childNode.push(createElement(
-        'b-table',   // nom de balise
-        {
-          props: {
-            fields: [
+    for (let i = 0; i < a; i++) {
+      let team
+      if (nb <= 3) {
+        team = this.teams.slice(i * 3, (i + 1) * 3)
+      } else {
+        team = this.teams.slice(i * nb, (i + 1) * nb)
+      }
+      childNode.push(
+        createElement(
+          'b-col',
+          {
+            props: {
+              cols: 12,
+              sm: 6,
+              lg: this.col
+            },
+            class: 'px-0 px-lg-3 m-0'
+          },
+          [
+            createElement(
+              'b-table',
               {
-                key: 'placement',
-                label: '#',
-                tdClass: 'font-weight-bold align-middle'
-              },
-              {
-                key: 'name',
-                thStyle: {
-                   display: 'none'
+                props: {
+                  fields: [
+                    {
+                      key: 'placement',
+                      label: '#',
+                      tdClass: 'align-middle colorGold'
+                    },
+                    {
+                      key: 'name',
+                      thStyle: {
+                        display: 'none'
+                      },
+                      tdClass: 'align-middle color text-break'
+                    },
+                    {
+                      key: 'point',
+                      thStyle: {
+                        display: 'none'
+                      },
+                      tdClass: 'align-middle color'
+                    }
+                  ],
+                  items: team,
+                  borderless: true
                 },
-                tdClass: 'align-middle'
-              },
-              {
-                key: 'point',
-                thStyle: {
-                   display: 'none'
-                },
-                tdClass: 'align-middle'
+                class: {
+                  'table-lg table-hover m-0': true
+                } /* ,
+                style: {
+                  width: this.col + '%'
+                } */
               }
-            ],
-            items: this.teams.slice(3 + i * nb, 3 + (i + 1) * nb),
-            borderless: true,
-          },
-          class: {
-            'table-lg table-hover': true /* ,
-            'col-2': this.col === 3,
-            'col-3': this.col === 4,
-            'col-5': this.col === 6,
-            'col-12': this.col === 12*/
-          },
-          style: {
-            width: this.col + '%'
-          }
-        }
-      ))
+            )
+          ]
+        )
+      )
     }
     return createElement(
-     'b-row',
-     {
-       class: 'd-flex justify-content-between'
-     },
-     childNode
-   )
+      'b-row',
+      {
+        class: 'd-flex justify-content-between'
+      },
+      childNode
+    )
   }
 }
 </script>
@@ -84,5 +98,9 @@ export default {
   }
   .table > thead {
     display:none !important;
+  }
+  .colorGold {
+    color: #ffbe14;
+    font-size: 4vmin;
   }
 </style>

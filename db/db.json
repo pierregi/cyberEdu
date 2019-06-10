@@ -18,7 +18,7 @@
     {
       "title": "Javascript",
       "key": "js",
-      "documentation": "CaesarDoc"
+      "documentation": "JsDoc"
     }
   ],
   "subThemes": [
@@ -92,7 +92,7 @@
       "refer": "sql",
       "key": "sql_injection",
       "subtitle": "SQL injection",
-      "point": 25,
+      "point": 35,
       "description": "In this exercise you have to connect to the service using a SQL injection",
       "exercise": {
         "component": "sql_injection_component"

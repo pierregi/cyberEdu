@@ -154,7 +154,7 @@ export default {
             {letter: 'y', 'fequency_(%)': 1.974},
             {letter: 'p', 'fequency_(%)': 1.929},
             {letter: 'b', 'fequency_(%)': 1.492},
-            {letter: 'v', 'fequency_(%)': 0.978},
+            {letter: 'v', 'fequency_(%)': 0.978}
           ],
           [
             {letter: 'k', 'fequency_(%)': 0.772},
@@ -170,19 +170,19 @@ export default {
           title: 'Encipher with 1st letter',
           text: 'IROPNZSYKDDVOIPNOIXD',
           color: 'text-success',
-          i:2
+          i: 2
         },
         {
           title: '2nd letter',
           text: 'SEXMVIXRRLAPPSMXOPK',
           color: 'text-danger',
-          i:3
+          i: 3
         },
         {
           title: '3rd letter',
           text: 'STMLCRGQBYGFNSLFCCF',
           color: 'text-info',
-          i:4
+          i: 4
         }
       ],
       cipherWidth: 0,
@@ -192,9 +192,9 @@ export default {
   computed: {
     cipherHTML () {
       let html = new Array(this.cipher[0].text.length).fill('')
-      for (let j = 0 ; j < this.cipher.length ; j++) {
-        for (let i = 0 ; i < this.cipher[j].text.length ; i++) {
-          html[i]+='<b class="'+this.cipher[j].color+'">'+this.cipher[j].text[i]+'</b>'
+      for (let j = 0; j < this.cipher.length; j++) {
+        for (let i = 0; i < this.cipher[j].text.length; i++) {
+          html[i] += '<b class="' + this.cipher[j].color + '">' + this.cipher[j].text[i] + '</b>'
         }
       }
       return html
@@ -211,7 +211,7 @@ export default {
     }
   },
   mounted () {
-    this.cipherWidth = document.getElementById('cipherText').clientWidth,
+    this.cipherWidth = document.getElementById('cipherText').clientWidth
     this.box = document.getElementById('cipherTextParent').clientWidth - this.cipherWidth - 1
     window.addEventListener('resize', this.size)
   },

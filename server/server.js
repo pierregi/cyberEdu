@@ -139,7 +139,7 @@ io.on('connection', function(socket){
       result.msg="Good job, you earn "+db.subThemes.find(obj => obj.key === msg.exercise).point+" points.";
       team.point+=db.subThemes.find(obj => obj.key === msg.exercise).point;
       let i=1;
-      io.emit("scoreBoard",teams.map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}).sort(function(a, b){return b.point - a.point}));
+      io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
     }
     else{
       result.variant='danger';
@@ -174,7 +174,7 @@ io.on('connection', function(socket){
 
   socket.on('scoreBoard', (msg) => {
     let i = 1;
-    socket.emit("scoreBoard",teams.map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}).sort(function(a, b){return b.point - a.point}));
+    socket.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
   });
 
   socket.on('testId', (msg) => {
@@ -190,7 +190,7 @@ io.on('connection', function(socket){
   socket.on('deletTeam', (id) => {
     teams.splice(teams.findIndex( obj => obj.id = id ), 1)
     let i = 1;
-    socket.emit("scoreBoard",teams.map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}).sort(function(a, b){return b.point - a.point}));
+    socket.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
   });
 
   socket.on('message', (msg) => {
@@ -405,7 +405,7 @@ function setEndDate(obj){
 }
 function connection(socket, team) {
   let i = 1;
-  io.emit("scoreBoard",teams.map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}).sort(function(a, b){return b.point - a.point}));
+  io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
   socket.emit("chooseNameSuccess", team);
   /*
   if(isPaused) {

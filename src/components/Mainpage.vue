@@ -8,7 +8,8 @@
       <div class="col-6 mh-100 m-0 overflow-auto">
         <router-view v-if="$route.name !== 'MainPage'" v-bind:myTimer="myTimer" v-on:doc="doc" v-on:sideDoc="side"></router-view>
         <div v-else>
-          <h1>Welcome to CyberEdu</h1>
+          <h1 class="text-center my-4">Welcome to CyberEdu</h1>
+          <p class="indent">In this platform, you will discover the basis of cryptography and cybersecurity.</p>
         </div>
       </div>
       <div class="col-4 h-100 m-0 p-0 border-left border-dark">
@@ -29,9 +30,9 @@
 import scoreBoard from '@/components/scoreBoard'
 import timer from '@/components/timer'
 import Menu from '@/components/Menu'
-const CaesarDoc = () => import('@/components/caesar_doc')
-const VigenereDoc = () => import('@/components/vigenere_doc')
-const SQLDoc = () => import('@/components/sql_doc')
+const CaesarDoc = () => import('@/components/docs/caesar_doc')
+const VigenereDoc = () => import('@/components/docs/vigenere_doc')
+const SQLDoc = () => import('@/components/docs/sql_doc')
 
 export default {
   props: ['myTimer'],
@@ -53,7 +54,7 @@ export default {
   },
   sockets: {
     goodId (doneExercise) {
-      this.$store.dispatch('doneExercise',doneExercise)
+      this.$store.dispatch('doneExercise', doneExercise)
     }
   },
   methods: {

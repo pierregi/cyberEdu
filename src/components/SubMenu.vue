@@ -7,6 +7,7 @@
     class="w-100 m-0 p-0 h-auto"
     v-bind:active="subTheme.key === $route.name"
     v-bind:link-classes="{'text-success': alreadyDone.indexOf(subTheme.key) !== -1, 'text-dark': select && alreadyDone.indexOf(subTheme.key) === -1 , 'bg-secondary': subTheme.key === $route.name, 'text-white w-100 h-auto m-0 px-4 p-0 d-flex justify-content-between': true}"
+    :disabled="myTimer.isPaused || !myTimer.isStarted"
     >
       <div class="m-0 p-0">{{ subTheme.subtitle }}</div>
       <div class="m-0 p-0">{{ subTheme.point }}</div>

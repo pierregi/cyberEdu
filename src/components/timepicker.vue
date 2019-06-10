@@ -44,7 +44,7 @@ export default {
         this.h1 = 0
       }
       var parse = parseInt(this.h1)
-      if (parse >=2 && this.h2 > 3) {
+      if (parse >= 2 && this.h2 > 3) {
         this.h2 = 3
       }
       this.h1 = parse < 0 ? 2 : parse % 3
@@ -62,16 +62,16 @@ export default {
       }
       var parse = parseInt(this.h2)
       if (this.h1 >= 2 && parse > 3) {
-        this.h1 ++
+        this.h1++
         parse %= 4
       } else if (this.h1 <= 0 && parse < 0) {
-        this.h1 --
+        this.h1--
         parse = 4
       } else if (parse > 9) {
-        this.h1 ++
+        this.h1++
         parse %= 10
       } else if (parse < 0) {
-        this.h1 --
+        this.h1--
         parse = 9
       }
       this.h2 = parse
@@ -89,10 +89,10 @@ export default {
       }
       var parse = parseInt(this.m1)
       if (parse > 5) {
-        this.h2 ++
+        this.h2++
         parse %= 6
       } else if (parse < 0) {
-        this.h2 --
+        this.h2--
         parse = 5
       }
       this.m1 = parse
@@ -110,10 +110,10 @@ export default {
         parse = 0
       }
       if (parse > 9) {
-        this.m1 ++
+        this.m1++
         parse %= 10
       } else if (parse < 0) {
-        this.m1 --
+        this.m1--
         parse = 9
       }
       this.m2 = parse
@@ -148,8 +148,8 @@ export default {
       document.getElementById('input' + i).selectionStart = 0
       document.getElementById('input' + i).selectionEnd = 2
     },
-    mouseDownHandler (func,i) {
-      this.mouseHold = setInterval(func,200,i)
+    mouseDownHandler (func, i) {
+      this.mouseHold = setInterval(func, 200, i)
     },
     mouseUpHandler () {
       clearInterval(this.mouseHold)

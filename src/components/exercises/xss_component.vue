@@ -60,9 +60,8 @@ export default {
   },
   watch: {
     myMessage () {
-      if (myMessage.length > 500) {
+      if (this.myMessage.length > 500) {
         this.errorLength = ''
-
       } else {
         this.errorLength = ''
       }
@@ -75,7 +74,7 @@ export default {
     newMessage (msg) {
       var div = document.createElement('div')
       div.innerHTML = msg
-      div.className  = "border-bottom border-light"
+      div.className = 'border-bottom border-light'
       var messages = document.getElementById('messages')
       messages.insertBefore(div, messages.childNodes[0])
       var tab = Array.from(div.childNodes)

@@ -6,7 +6,7 @@
         v-bind:is="theme.documentation"
         v-bind:sideDoc="false"
       />
-      <h3 v-if="!biggerDoc">Exercises :</h3>
+      <h2 v-if="!biggerDoc">Exercises :</h2>
       <SubMenu v-if="!biggerDoc" v-bind:theme="name" v-bind:myTimer="myTimer" class="offset-1 col-5 col-xl-4 font-weight-bold" v-bind:select="true"/>
     </div>
     <router-view v-if="!biggerDoc"></router-view>
@@ -15,9 +15,10 @@
 </template>
 <script>
 import SubMenu from '@/components/SubMenu'
-const CaesarDoc = () => import('@/components/caesar_doc')
-const VigenereDoc = () => import('@/components/vigenere_doc')
-const SQLDoc = () => import('@/components/sql_doc')
+const CaesarDoc = () => import('@/components/docs/caesar_doc')
+const VigenereDoc = () => import('@/components/docs/vigenere_doc')
+const SQLDoc = () => import('@/components/docs/sql_doc')
+const JsDoc = () => import('@/components/docs/js_doc')
 
 export default {
   props: ['name', 'myTimer'],
@@ -26,7 +27,7 @@ export default {
       isSubThemeSelected: false,
       biggerDoc: false,
       theme: {},
-      error: false,
+      error: false
     }
   },
   computed: {
@@ -44,7 +45,8 @@ export default {
     SubMenu,
     CaesarDoc,
     VigenereDoc,
-    SQLDoc
+    SQLDoc,
+    JsDoc
   },
   watch: {
     $route (to, from) {
@@ -60,6 +62,14 @@ export default {
           this.error = true
         }
       )
+    },
+    myTimer: {
+      handler () {
+        if (!this.myTimer.isStarted || this.myTimer.isPaused) {
+          this.$router.push({name: this.name})
+        }
+      },
+      deep: true
     }
   },
   mounted () {
@@ -75,11 +85,6 @@ export default {
         this.error = true
       }
     )
-  },
-  updated () {
-    if (!this.myTimer.isStarted || this.myTimer.isPaused) {
-      this.$router.push({name: this.theme.name})
-    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="">
     <h2 class="subtitle">{{ exercise.subtitle }}</h2>
     <div v-if="exercise !== ''">
-      <description v-bind:description="exercise.description"></description>
+      <p class="indent" v-html="exercise.description"></p>
       <component
         v-bind:is="exercise.exercise.component" v-bind:name="exercise.key" v-bind:data="exercise.exercise">
       </component>
@@ -14,10 +14,9 @@
   </div>
 </template>
 <script>
-import description from '@/components/description'
-const cipher_component = () => import('@/components/cipher_component')
-const sql_injection_component = () => import('@/components/sql_injection_component')
-const xss_component = () => import('@/components/xss_component')
+const cipher_component = () => import('@/components/exercises/cipher_component')
+const sql_injection_component = () => import('@/components/exercises/sql_injection_component')
+const xss_component = () => import('@/components/exercises/xss_component')
 
 export default {
   props: ['name'],
@@ -30,7 +29,6 @@ export default {
     }
   },
   components: {
-    description,
     cipher_component,
     sql_injection_component,
     xss_component

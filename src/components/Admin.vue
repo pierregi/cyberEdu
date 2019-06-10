@@ -2,9 +2,10 @@
   <div class="container-fluid h-100 ">
     <div class="row h-100">
         <div class="offset-1 col-10 p-0 h-100" >
-          <div class="row col-12 p-0 m-0 justify-content-between">
-            <div class="d-flex col align-items-center">
-              <h1>Admin</h1>
+          <div class="row col-12 p-0 m-0 justify-content-between" style="max-height: 15%">
+            <div class="p-0 d-flex col justify-content-center d-flex flex-column">
+              <h1 class="m-0">Admin</h1>
+              <b-link class="" v-bind:to="'/'">Return to Home</b-link>
             </div>
             <div class="col-6 m-0 p-0">
               <Timer class="m-0 p-0" v-bind:myTimer="myTimer" style="height: 150px"/>
@@ -28,7 +29,7 @@
               </div>
               <b-alert class="text-center" v-if="repServTimer.msg" show v-bind:variant="repServTimer.variant">{{ repServTimer.msg }}</b-alert>
             </div>
-            <b-col cols="12" xl="6" class="mb-5 p-0 pl-xl-5 d-flex flex-column">
+            <b-col cols="12" xl="6" class="m-0 p-0 pl-xl-5 d-flex flex-column">
               <h3>Teams</h3>
               <!--<b-list-group-item
                 v-for="team in teams"
@@ -39,11 +40,12 @@
                 v-for="team in teams"
                 v-bind:key="team.id"
                 class="p-0 m-0"
+                style="height: 40px"
                 >
-                  <b-button variant="outline-success" class="d-flex justify-content-between p-3 col-11 rounded-0" @click="chosenName(team.id)">
-                    <b>{{ team.name }}</b> <span>{{team.point}}</span>
+                  <b-button variant="outline-dark" class="d-flex justify-content-between col-11 rounded-0" @click="chosenName(team.id)">
+                    <b>{{ team.placement }}. {{ team.name }}</b> <span>{{team.point}}</span>
                   </b-button>
-                  <b-button @click="deletTeam(team.id)" variant="outline-danger" aria-label="Close" style="font-size: 25px"><span aria-hidden="true">&times;</span></b-button>
+                  <b-button @click="deletTeam(team.id)" variant="outline-danger" aria-label="Close" class="p-0" style="font-size: 25px"><span aria-hidden="true" class="m-0 p-0">&times;</span></b-button>
                 </b-button-group>
               <!--</b-list-group-item>-->
               <!--<b-list-group-item
@@ -58,14 +60,19 @@
               <b-alert v-if="repServListName" show v-bind:variant="danger">{{ repServListName }}</b-alert>
             </b-col>
           </div>
-          <b-form v-else class="mb-2" @submit.prevent="connectAdmin" inline>
-            <label class="mr-2 col-form-label col-form-label-lg" for="password">Password</label>
-            <b-input class="mr-2 col-7 col-md-5 col-lg-3" type="password" id="password" v-model="password" required></b-input>
-            <b-button variant="primary" type="submit" name="connect" style="width: 100px">Connect</b-button>
-          </b-form>
-          <b-link v-bind:to="'/'">Return</b-link>
+          <div v-else class="d-flex flex-column">
+            <b-form class="mb-2" @submit.prevent="connectAdmin" inline>
+              <label class="mr-2 col-form-label col-form-label-lg" for="password">Password</label>
+              <b-input class="mr-2 col-7 col-md-5 col-lg-3" type="password" id="password" v-model="password" required></b-input>
+              <b-button variant="primary" type="submit" name="connect" style="width: 100px">Connect</b-button>
+
+            </b-form>
+            <b-alert class="col-5 text-center" :variant="repServ.variant" show>{{repServ.msg}}</b-alert>
+          </div>
+
         </div>
       </div>
+
     </div>
 </template>
 <script>
