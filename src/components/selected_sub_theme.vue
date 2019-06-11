@@ -2,7 +2,7 @@
   <div class="">
     <h2 class="subtitle">{{ exercise.subtitle }}</h2>
     <div v-if="exercise !== ''">
-      <p class="indent" v-html="exercise.description"></p>
+      <p class="indent text-justify" v-html="exercise.description"></p>
       <component
         v-bind:is="exercise.exercise.component" v-bind:name="exercise.key" v-bind:data="exercise.exercise">
       </component>

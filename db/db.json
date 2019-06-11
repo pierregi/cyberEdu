@@ -103,12 +103,9 @@
       "key": "xss_exercise",
       "subtitle": "XSS",
       "point": 40,
-      "description": "",
+      "description": "In this exercise, you have to retrive a cookie which have been add to the admin page.<br/>A cookie is some data that are stock on the web browser by the web page to transfer data to an other page.<br/>For example when you connect an account in any site, a <span class='text-danger'>login cookie</span> is created. So when the web app needs to verify if your are connected, it sends the <span class='text-danger'>login cookie</span> to the server which verify it.<br/>To get your cookies, you can use <span class='text-primary'>document.cookie</span> syntax.",
       "exercise": {
-        "component": "xss_component",
-        "source": "&lt;form id='form'&gt;<br/>&nbsp&nbsp&nbsp&lt;textarea id='content' value='c moa'&gt;&lt;/textarea&gt;<br/>&nbsp&nbsp&nbsp&lt;button id='button'&gt;send&lt;/button&gt;<br/>&lt;/form&gt;<br/>&lt;div id='messages'&gt;&lt;/div&gt;<br/>&lt;script&gt;<br/>&nbsp&nbsp&nbspdocument.getElementById('button').addEventListener('click', send, false);<br/>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp// The send fonction add team name's to the message and send it to the other<br/>&lt;/script&gt;<br/>",
-        "__comment": "<form id='form'>\n\t<textarea id='content' value='c moa'></textarea>\n\t<button id='button'>send</button>\n</form>\n<div id='messages'></div>\n<script>\n\tdocument.getElementById('button').addEventListener('click', send, false);\n\t\t// The send fonction add team name's to the message and send it to the other\n</script>\n",
-        "__comment": "var send = function (event){\n\tevent.preventDefault(); // Block page reload on form submit\n\tvar myDiv = document.createElement('div');\n\tmyDiv.innerHTML = '<strong>admin :</strong> '+document.getElementById('content').value;\n\t\t// Set myDiv content's with textarea value's\n\tdocument.getElementById('messages').appendChild(myDiv); // Add myDiv to the page\n}\n"
+        "component": "xss_component"
       }
     }
   ],

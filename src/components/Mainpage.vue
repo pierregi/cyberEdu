@@ -33,6 +33,7 @@ import Menu from '@/components/Menu'
 const CaesarDoc = () => import('@/components/docs/caesar_doc')
 const VigenereDoc = () => import('@/components/docs/vigenere_doc')
 const SQLDoc = () => import('@/components/docs/sql_doc')
+const JsDoc = () => import('@/components/docs/js_doc')
 
 export default {
   props: ['myTimer'],
@@ -50,7 +51,8 @@ export default {
     scoreBoard,
     CaesarDoc,
     VigenereDoc,
-    SQLDoc
+    SQLDoc,
+    JsDoc
   },
   sockets: {
     goodId (doneExercise) {

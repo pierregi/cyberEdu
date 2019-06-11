@@ -9,6 +9,7 @@ import App from './App'
 import BootstrapVue from 'bootstrap-vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faAngleUp, faAngleDown, faExpand, faCompress } from '@fortawesome/free-solid-svg-icons'
+import { faLightbulb } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import router from './router'
 import store from './store/Appstore'
@@ -18,7 +19,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(Vuex)
 Vue.use(VueCookie)
 Vue.use(BootstrapVue)
-library.add(faAngleUp, faAngleDown, faExpand, faCompress)
+library.add(faAngleUp, faAngleDown, faExpand, faCompress, faLightbulb)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

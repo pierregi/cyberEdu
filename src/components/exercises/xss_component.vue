@@ -13,13 +13,30 @@
        ></b-input>
        <b-button variant="primary" type="submit" style="width: 100px">Send</b-button>
      </b-form>
-
     </b-row>
     <div class="m-0 p-0" v-else>
       <b-row>
         <b-col tag="h4">Source code</b-col>
         <b-button class="ml-auto" variant="primary" @click="sendKey = true" style="width: 100px">Validate</b-button>
-        <b-col cols="12" class="text-break my-2 p-2 border bg-white border-secondary rounded" tag="p" v-html="data.source"></b-col>
+        <b-col cols="12" class="text-break my-2 p-2 border bg-white border-secondary rounded" tag="p">
+          <span class="text-danger">&lt;form <span class="text-warning">id=</span><span class="text-success">"form"</span>&gt;</span><br/>
+          <div class="ml-3">
+            <span class="text-danger">&lt;textarea <span class="text-warning">id=</span><span class="text-success">"content"</span> <span class="text-warning">value=</span><span class="text-success">""</span> <span class="text-warning">placeholder=</span><span class="text-success">"New message"</span>&gt;&lt;/textarea&gt;</span><br/>
+            <span class="text-danger">&lt;button <span class="text-warning">id=</span><span class="text-success">"button"</span>&gt;</span>send<span class="text-danger">&lt;/button&gt;</span><br/>
+          </div>
+          <span class="text-danger">&lt;/form&gt;</span><br/>
+          <span class="text-danger">&lt;div <span class="text-warning">id=</span><span class="text-success">"messages"</span>&gt;&lt;/div&gt;</span><br/>
+          <span class="text-danger">&lt;script&gt;</span><br/>
+          <div class="ml-3">
+            document.<span class="text-primary">getElementById</span>( <span class="text-success">'button'</span> ).<span class="text-primary">addEventListener</span>( <span class="text-success">'click'</span>, <span class="text-primary">send</span>, <span class="text-warning">false</span> ) ;<br/>
+            <span class="text-secondary">/* When a click is emit on the button, the message is send to the admin.*/</span><br/>
+          </div>
+          <span class="text-danger">&lt;/script&gt;</span>
+        </b-col>
+      </b-row>
+      <b-row class="my-2">
+
+        <span><font-awesome-icon :icon="['far', 'lightbulb']"/> You have to make the admin send his cookie.</span>
       </b-row>
       <b-row class="bg-dark rounded p-2">
         <b-col cols="12" tag="h4" class="text-light">New Message</b-col>
@@ -42,6 +59,7 @@
         <b-col v-if="isThereMessages" cols="12" id="messages" class="p-2 bg-white rounded mt-2 text-break overflo-auto" style="max-height: 325px; overflow-y: auto;">
         </b-col>
       </b-row>
+
     </div>
   </div>
 </template>
