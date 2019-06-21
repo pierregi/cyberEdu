@@ -11,6 +11,43 @@ var { JSDOM } = jsdom;
 const JlSqlApi = require('jl-sql-api');
 const api = new JlSqlApi;
 
+var sha256 = require('sha256')
+
+var PASSWORD_ADMIN;
+var port;
+
+if (process.argv.length > 2) {
+  console.log(process.argv[2]);
+  PASSWORD_ADMIN = sha256(process.argv[2]);
+} else {
+}
+
+if (process.argv.includes('--password')) {
+  try {
+    PASSWORD_ADMIN = sha256(process.argv[process.argv.findIndex(obj => obj === '--password') + 1]);
+  } catch (e) {
+    console.log("You have to enter a passwoord after the --password parameter");
+    process.exit(1);
+  }
+} else {
+  PASSWORD_ADMIN = 'b6a058e9850128c7302aef1d6716dd98704866239db7017b136bc9ce7839d0fb';
+}
+
+if (process.argv.includes('--port')) {
+  try {
+    port =  parseInt(process.argv[process.argv.findIndex(obj => obj === '--port') + 1]);
+    if (typeof port !== 'number' || isNaN(port)) {
+      console.log("The port should be an integer");
+      process.exit(1);
+    }
+  } catch (e) {
+    console.log("You have to enter a port after the --port parameter");
+    process.exit(1);
+  }
+} else {
+  port = 3000;
+}
+
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
@@ -22,76 +59,75 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, './dist')));
 
 app.get('/api/themes', (req, res) => {
+
   let response = exercisesFile.themes;
   res.send(response);
+
 });
 
 app.get('/api/selectedTheme', (req, res) => {
   let param = Object.entries(req.query);
-  let response = exercisesFile.themes.find(obj => obj[param[0][0]]===param[0][1]);
+  let response = exercisesFile.themes.find(obj => obj[param[0][0]] === param[0][1]);
   res.send(response);
 });
 
 app.get('/api/subThemes', (req, res) => {
   let response = exercisesFile.subThemes.filter(obj => {
     let res = true;
-    for(key in req.query){
+    for (key in req.query) {
       res = res && req.query[key] === obj[key];
     }
     return res;
   });
+
   res.send(response.map(obj => ({key: obj.key, title: obj.title, point: obj.point})));
 });
+
 app.get('/api/exercise', (req, res) => {
   let param = Object.entries(req.query);
-  let response = exercisesFile.subThemes.find(obj => obj[param[0][0]]===param[0][1]);
+  let response = exercisesFile.subThemes.find(obj => obj[param[0][0]] === param[0][1]);
   res.send(response);
 });
 
 app.get('/api/sql_injection', (req, res) => {
-  var result={};
+  var result = {};
   try {
-    var myQuery = "SELECT * WHERE login ='"+req.query.login+"' and password = '"+req.query.password+"'";
+    var myQuery = "SELECT * WHERE login ='" + req.query.login + "' and password = '" + req.query.password + "'";
+    myQuery = myQuery.split(';--')[0];
 
-    myQuery = myQuery.split(';--')[0]
-console.log(myQuery);
     api.query(myQuery)
     .fromArrayOfObjects([
       {"login": 'user1', "password": 'GjdyOnvpa'},
       {"login": 'user2', "password": 'qvua884wx'},
       {"login": 'user3', "password": 'svhCsqdi9'},
-      {"login": 'admin', "password": '87Dqd7qd6'},
+      {"login": 'admin', "password": '87Dqd7qd6'}
     ])
     .toArrayOfObjects((recordset) => {
-      if(Object.keys(recordset).length>0){
-        // send records as a response
-        result.msg= "You successfully connected as "+recordset[0].login;
-        result.password= "P45SW0RD";
-        result.validate= true
+      if (Object.keys(recordset).length > 0) {
+        result.msg = "You successfully connected as "+recordset[0].login;
+        result.password = "P45SW0RD";
+        result.validate = true
         res.send(result);
-      }else{
-        result.validate=false;
-        result.msg="Wrong login or password !";
+      } else {
+        result.validate = false;
+        result.msg = "Wrong login or password !";
         res.send(result);
       }
     })
-
-  }
-  catch(error) {
-    result.validate=false;
-    result.msg="Error on the database";
+  } catch (error) {
+    result.validate = false;
+    result.msg = "Error on the database";
     res.send(result);
   }
-
-
-})
-
-app.use(function(req, res, next) {
-    res.status(404).send("Sorry, this page does not exist.");
 });
 
-http.listen(3000, () => {
-  console.log('listening on *:3000');
+app.use(function(req, res, next) {
+  res.status(404).send("Sorry, this page does not exist.");
+});
+
+http.listen(port, () => {
+  console.log('listening on : ' + port);
+  console.log('sha256: ' + PASSWORD_ADMIN);
 });
 
 
@@ -100,11 +136,11 @@ var endTimer = null,
     paused,
     isPaused = false,
     isStop = false,
-    teams = new Array(),
-    password = "gabin";
+    teams = new Array();
 
-var timer = function (){
-  if(new Date().getTime() >= endTimer.getTime()){
+var timer = function () {
+
+  if (new Date().getTime() >= endTimer.getTime()) {
     clearInterval(interval);
     endTimer = null;
     paused = null;
@@ -112,6 +148,7 @@ var timer = function (){
     isStop = true;
     io.emit("stop");
   }
+
 }
 
 io.on('connection', function(socket){
@@ -119,123 +156,114 @@ io.on('connection', function(socket){
 
   socket.on("exercise", function(msg){
     var result = {};
-    if(team == null)
-    {
+    if (team == null) {
       socket.emit('wrongId');
-    }
-    else if (endTimer === null) {
-      result.variant='warning';
-      result.validate=false;
-      result.msg="The game is not started";
-    }
-    else if (isPaused) {
-      result.variant='warning';
-      result.validate=false;
-      result.msg="The game is paused";
-    }
-    else if (isStop) {
-      result.variant='warning';
-      result.validate=false;
-      result.msg="The game is finished";
-    }
-    else if(team.exercise.indexOf(msg.exercise)!=-1){
-      result.variant='warning';
-      result.validate=false;
-      result.msg="You have already done this exercise and you can't earn points twice with it.";
-    }
-    else if (exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).recursiveCorrection) {
+    } else if (endTimer === null) {
+      result.variant = 'warning';
+      result.validate = false;
+      result.msg = "The game is not started";
+    } else if (isPaused) {
+      result.variant = 'warning';
+      result.validate = false;
+      result.msg = "The game is paused";
+    } else if (isStop) {
+      result.variant = 'warning';
+      result.validate = false;
+      result.msg = "The game is finished";
+    } else if (team.exercise.indexOf(msg.exercise) != -1) {
+      result.variant = 'warning';
+      result.validate = false;
+      result.msg = "You have already done this exercise and you can't earn points twice with it.";
+    } else if (exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).recursiveCorrection) {
       let answer = msg.answer.toUpperCase().replace(/\W/g,"")
       let correction = exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).answer;
       let errorCount = answer.length > correction.length ? answer.length - correction.length : correction.length - answer.length
-      for(let i = 0; i < Math.min(answer.length, correction.length); i++) {
+      for (let i = 0; i < Math.min(answer.length, correction.length); i++) {
         errorCount = answer[i] !== correction[i] ? errorCount + 1 : errorCount
       }
       if (errorCount === 0) {
         result.validate = true
       } else {
         result.validate = false
-        result.msg=`There were ${errorCount} mismatch between your answer and the correction so try again, you will do better.`;
-        result.variant='danger';
+        result.msg = `There were ${errorCount} mismatch between your answer and the correction so try again, you will do better.`;
+        result.variant = 'danger';
       }
-    }else {
-      if(msg.answer.toUpperCase().replace(/\W/g,"")===exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).answer) {
+    } else {
+      if (msg.answer.toUpperCase().replace(/\W/g,"") === exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).answer) {
         result.validate = true
       } else {
         result.validate = false
-        result.msg="Try again.";
-        result.variant='danger';
+        result.msg = "Try again.";
+        result.variant = 'danger';
       }
     }
-    if(result.validate){
+    if (result.validate) {
       team.exercise.push(msg.exercise);
-      result.variant='success';
-      result.validate=true;
-      result.msg="Good job, you earn "+exercisesFile.subThemes.find(obj => obj.key === msg.exercise).point+" points.";
-      team.point+=exercisesFile.subThemes.find(obj => obj.key === msg.exercise).point;
-      let i=1;
-      io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
+      result.variant = 'success';
+      result.validate = true;
+      result.msg = `Good job, you earn ${ exercisesFile.subThemes.find(obj => obj.key === msg.exercise).point } points.`;
+      team.point += exercisesFile.subThemes.find(obj => obj.key === msg.exercise).point;
+      emitScoreBoard()
     }
     socket.emit("exercise",result);
   });
 
 
   socket.on('choose name', (msg) => {
-    var id=randomId();
+    var id = randomId();
     teams.push({id, name: msg.name, point: 0, exercise: [], socketId: socket.id});
-    team=teams.find(obj => {return obj.id === id});
+    team = teams.find(obj => obj.id === id);
     connection(socket, team);
   });
 
   socket.on('chosenName', (msg) => {
-    if(msg.password===password){
-      team=teams.find(obj => {return obj.id === msg.id});
-      if(team!=null)
+    if (msg.password === PASSWORD_ADMIN) {
+      team = teams.find(obj => obj.id === msg.id);
+      if (team != null) {
         connection(socket, team);
-      else
+      } else {
         socket.emit('listName', {rep: "This team don't exist"});
-    }else{
+      }
+    } else {
       socket.emit('listName', {rep: "Wrong password !"});
     }
   });
 
   socket.on('scoreBoard', (msg) => {
-    let i = 1;
-    socket.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
+    emitScoreBoard();
   });
 
-  socket.on('testId', (msg) => {
-    if(typeof teams.find((obj) => { return obj.id == msg}) === 'undefined')
-    {
+  socket.on('testId', (id) => {
+    if (typeof teams.find((obj) => obj.id === id) === 'undefined') {
       socket.emit('wrongId');
-    }else{
-      team = teams.find(obj => {return obj.id === msg});
+    } else {
+      team = teams.find(obj => obj.id === id);
       team.socketId = socket.id
       socket.emit('goodId', team.exercise);
     }
   });
 
   socket.on('deletTeam', (id) => {
-    const deletedTeamIndex = teams.findIndex( obj => obj.id = id )
+    const deletedTeamIndex = teams.findIndex( obj => obj.id === id )
     const deletedTeam = teams[deletedTeamIndex]
     const socketId = deletedTeam.socketId
     io.sockets.sockets[socketId].emit('wrongId')
     teams.splice(deletedTeamIndex, 1)
-    let i = 1;
-    io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
+    emitScoreBoard();
   });
 
+  // Exercise XSS
   socket.on('message', (msg) => {
-    if(team == null)
-    {
+    if(team == null) {
       socket.emit('wrongId');
-    }else{
-      var result = '<strong>'+team.name+' :</strong> '+msg.msg;
+    } else {
+      var result = `<strong>${team.name} :</strong> ${msg.msg}`;
       const dom = new JSDOM(`
         <!DOCTYPE html>
         <html>
           <head>
             <script>
-              document.cookie='you can validate with password=`+exercisesFile.subThemes_correction.find(obj => obj.key === 'xss_exercise').answer+`';
+              document.cookie='you can validate with password=${exercisesFile.subThemes_correction.find(obj => obj.key === 'xss_exercise').answer}';
               var send = function (event){
                   var div = document.createElement('div');
                   div.innerHTML = '<strong>admin :</strong> '+document.getElementById('content').value;
@@ -253,7 +281,7 @@ io.on('connection', function(socket){
             <script>
               document.getElementById('button').addEventListener("click", send, false);
             </script>
-            <div>`+result+`<div>
+            <div>${result}<div>
           </body>
         </html>`, {
         //cookieJar,
@@ -263,14 +291,17 @@ io.on('connection', function(socket){
       socket.emit('newMessage', result);
 
       var admin = dom.window.document.getElementById('messages').innerHTML;
-      if(admin)
+      if(admin) {
         socket.emit('newMessage', admin);
+      }
     }
   });
+
+  // Return the current timer settings
   socket.on('getTimer', (msg) => {
     if (endTimer !== null) {
       socket.emit('start', endTimer.getTime());
-      if (isPaused){
+      if (isPaused) {
         socket.emit('pause', paused.getTime());
       }
     } else if (isStop) {
@@ -280,9 +311,10 @@ io.on('connection', function(socket){
     }
   });
 
+
   socket.on('connectAdmin', (msg) => {
-    var rep={}
-    if (msg.password === password) {
+    var rep = {}
+    if (msg.password === PASSWORD_ADMIN) {
       rep.connected = true;
       rep.repServ = {msg: 'Connected with success', variant: 'success'};
     } else {
@@ -290,8 +322,9 @@ io.on('connection', function(socket){
     }
     socket.emit('connectAdmin',rep);
   });
+
   socket.on('restart', (msg) => {
-    if (msg.password === password) {
+    if (msg.password === PASSWORD_ADMIN) {
       teams = new Array();
       clearInterval(interval);
       endTimer = null;
@@ -306,8 +339,8 @@ io.on('connection', function(socket){
     socket.emit('timerSetting', rep);
   });
   socket.on('start', (msg) => {
-    var rep={}
-    if (msg.password === password) {
+    var rep = {}
+    if (msg.password === PASSWORD_ADMIN) {
       if(endTimer === null){
         isStop = false;
         isPaused = false;
@@ -326,8 +359,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('stop', (msg) => {
-    var rep={}
-    if (msg.password === password) {
+    var rep = {}
+    if (msg.password === PASSWORD_ADMIN) {
       if(endTimer !== null){
         clearInterval(interval);
         isStop = true;
@@ -344,8 +377,8 @@ io.on('connection', function(socket){
   });
 
   socket.on('pause', (msg) => {
-    var rep={}
-    if (msg.password === password) {
+    var rep = {}
+    if (msg.password === PASSWORD_ADMIN) {
       if(endTimer !== null){
         if(!isPaused) {
           isPaused = true;
@@ -366,12 +399,12 @@ io.on('connection', function(socket){
   });
 
   socket.on('play', (msg) => {
-    var rep={}
-    if (msg.password === password) {
+    var rep = {}
+    if (msg.password === PASSWORD_ADMIN) {
       if(endTimer !== null){
         if(isPaused){
           isPaused = false;
-          endTimer.setTime(endTimer.getTime()+new Date().getTime()-paused.getTime());
+          endTimer.setTime(endTimer.getTime() + new Date().getTime() - paused.getTime());
           paused = null;
           interval = setInterval(timer, 1000);
           io.emit("play", endTimer.getTime());
@@ -389,11 +422,11 @@ io.on('connection', function(socket){
   });
 
   socket.on('change', (msg) => {
-    var rep={}
-    if (msg.password === password) {
-      if(endTimer !== null){
+    var rep = {}
+    if (msg.password === PASSWORD_ADMIN) {
+      if (endTimer !== null) {
         setEndDate(msg.duration);
-        if(new Date().getTime() >= endTimer.getTime()){
+        if (new Date().getTime() >= endTimer.getTime()) {
           clearInterval(interval);
           endTimer = null;
           isStop = true;
@@ -417,43 +450,33 @@ io.on('connection', function(socket){
 
 });
 
-
-
-/*
-app.get('*', (req, res) => {
-  res.send("404");
-});
-*/
-
-function setEndDate(obj){
+function setEndDate(obj) {
   var myNow =  new Date();
   endTimer = myNow;
-  if(typeof obj.hours !== 'undefined') endTimer.setHours(myNow.getHours()+parseInt(obj.hours));
-  if(typeof obj.minutes !== 'undefined') endTimer.setMinutes(myNow.getMinutes()+parseInt(obj.minutes));
+  if (typeof obj.hours !== 'undefined') endTimer.setHours(myNow.getHours()+parseInt(obj.hours));
+  if (typeof obj.minutes !== 'undefined') endTimer.setMinutes(myNow.getMinutes()+parseInt(obj.minutes));
 }
+
 function connection(socket, team) {
-  let i = 1;
-  io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
+  emitScoreBoard();
   team.socketId = socket.id
   socket.emit("chooseNameSuccess", team);
-  /*
-  if(isPaused) {
-    socket.emit('pause',endTimer.getTime());
-  } else if (endTimer !== null) {
-    socket.emit('start',endTimer.getTime());
-  }
-  */
 }
+
 function randomId() {
     var liste = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
     var result = '';
     for (i = 0; i < 8; i++) {
         result += liste[Math.floor(Math.random() * liste.length)];
     }
-    if(typeof teams.find((obj) => { return obj.id == result}) !== 'undefined')
-    {
+    if (typeof teams.find((obj) => obj.id === result) !== 'undefined') {
       result = randomId();
     }
 
     return result;
+}
+
+function emitScoreBoard () {
+  let i = 1;
+  io.emit("scoreBoard", teams.sort((a, b) => b.point - a.point).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
 }

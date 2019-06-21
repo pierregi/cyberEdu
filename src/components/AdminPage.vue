@@ -75,6 +75,7 @@
 <script>
 import Timer from '@/components/timer'
 import Timepicker from '@/components/timepicker'
+import sha256  from 'sha256';
 
 export default {
   props: ['timerSetting'],
@@ -97,6 +98,9 @@ export default {
     },
     connectAdmin (msg) {
       this.connected = msg.connected
+      if (!this.connected) {
+        this.password = ''
+      }
       this.repServ = msg.repServ
       clearTimeout(this.myTimeOut)
     },
@@ -115,6 +119,8 @@ export default {
       this.newTime = data
     },
     connectAdmin () {
+      this.password = sha256(this.password)
+      console.log(this.password)
       this.$socket.emit('connectAdmin', { password: this.password })
       this.myTimeOut = setTimeout(() => {
         this.repServ = {msg: 'Could not join server', variant: 'danger'}
