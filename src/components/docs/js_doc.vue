@@ -1,9 +1,9 @@
 <template>
   <div class="">
-    <h2>Documentation</h2>
+    <h2 class="text-danger">Documentation</h2>
     <p class="indent">Javascript is the programming language that makes your web pages to be dynamic and animated.</p>
     <div class="my-4">
-      <h3>Web page</h3>
+      <h3 class="text-danger">Web page</h3>
       <p class="">
         First of all, a web page is composed of 3 different part :
         <ul>
@@ -14,9 +14,9 @@
       </p>
     </div>
     <div class="my-4">
-      <h4>HTML</h4>
+      <h4 class="text-danger">HTML</h4>
       <p class="indent">An HTML file is composed of tag like <span class="text-danger">&lt;div&gt;</span> to open and <span class="text-danger">&lt;/div&gt;</span> to close the first one.</p>
-      <h5>Example : </h5>
+      <h5 class="text-info">Example : </h5>
       <p class="indent">If we put the following lines in an HTML file and open it with a Web browser, it will open a page with in <span class="text-primary">Hello World</span> write as a title.<br/>
         <span class="text-danger ml-3">&lt;div&gt;</span><br/>
         <span class="text-danger ml-5">&lt;h1&gt;</span> Hello World <span class="text-danger">&lt;/h1&gt;</span><br/>
@@ -30,9 +30,9 @@
       </div>
     </div>
     <div class="my-4">
-      <h4>Javascript</h4>
+      <h4 class="text-danger">Javascript</h4>
       <p class="indent">To use Javascript, you can put it in a <span class="text-danger">&lt;script&gt;</span> tag or load a .js file in your HTML file.</p>
-      <h5>Example</h5>
+      <h5 class="text-info">Example :</h5>
       <div class="ml-3">
         <p class="">
           Click on the following buttons to see some annimations.
@@ -62,9 +62,9 @@
       </p>
     </div>
     <div class="mt-4 mb-5">
-      <h3>XSS</h3>
+      <h3 class="text-danger">XSS</h3>
       <p class="indent">An XSS use the fact that, sometimes, user entries are not treat and just add to the page.</p>
-      <h4>Example</h4>
+      <h4 class="text-info">Example :</h4>
       <p class="indent">We are in a forum where users can send and receive messages.</p>
       <div class="m-3 w-auto p-4 border bg-white border-secondary rounded">
         <b-form inline @submit.prevent="newMessage" class="m-0 p-0">
@@ -228,7 +228,6 @@ export default {
       var messages = document.getElementById('messagesDoc')
       messages.appendChild(p)
       var tab = Array.from(p.childNodes)
-      // console.log(tab)
 
       var scriptNode = tab.filter((node) => {
         return node.nodeName.toLowerCase() === 'script'

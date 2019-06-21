@@ -50,9 +50,10 @@
               rows="1"
               max-rows="3"
               class="col-12 col-lg-8 col-xl-9"
+              :disabled="timerSetting.isPaused"
             >
             </b-form-textarea>
-            <b-button class="ml-auto" variant="primary" type="submit" name="submit" style="width: 100px" @click="message" :disabled="myMessage.length > 5000">Send</b-button>
+            <b-button class="ml-auto" variant="primary" type="submit" name="submit" style="width: 100px" @click="message" :disabled="myMessage.length > 5000 || timerSetting.isPaused">Send</b-button>
 
           </b-row>
         </b-col>
@@ -66,7 +67,7 @@
 
 <script>
 export default {
-  props: ['name', 'data'],
+  props: ['name', 'data', 'timerSetting'],
   data () {
     return {
       isThereMessages: false,
@@ -96,7 +97,6 @@ export default {
       var messages = document.getElementById('messages')
       messages.insertBefore(div, messages.childNodes[0])
       var tab = Array.from(div.childNodes)
-      // console.log(tab)
 
       var scriptNode = tab.filter((node) => {
         return node.nodeName.toLowerCase() === 'script'

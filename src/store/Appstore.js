@@ -5,29 +5,27 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const store = new Vuex.Store({
+export default new Vuex.Store({
   state: {
     alreadyDone: []
   },
   mutations: {
-    ADD_DONE_EXERCISE: (state, value) => {
-      state.alreadyDone.push(value)
+    ADD_DONE_EXERCISE: (state, exercise) => {
+      state.alreadyDone.push(exercise)
     },
-    DONE_EXERCISE: (state, value) => {
-      state.alreadyDone = value
+    SET_DONE_EXERCISE: (state, exercises) => {
+      state.alreadyDone = exercises
     }
   },
   actions: {
-    addDoneExercise: (state, value) => {
-      store.commit('ADD_DONE_EXERCISE', value)
+    addDoneExercise: (context, exercise) => {
+      context.commit('ADD_DONE_EXERCISE', exercise)
     },
-    doneExercise: (state, value) => {
-      store.commit('DONE_EXERCISE', value)
+    setDoneExercise: (context, exercises) => {
+      context.commit('SET_DONE_EXERCISE', exercises)
     }
   },
   getters: {
     getAlreadyDone: state => state.alreadyDone
   }
 })
-
-export default store

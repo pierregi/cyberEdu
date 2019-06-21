@@ -1,6 +1,13 @@
 <template>
   <b-container fluid class="h-100 p-0 bg-light">
-    <router-view v-bind:myTimer="myTimer" class="h-100"></router-view>
+    <router-view v-bind:timerSetting="timerSetting" class="h-100"></router-view>
+    <b-modal
+      title="Error message"
+      id="modal-teamNotExist"
+      ok-only
+      >
+      <span>Your team do not exist or have been delete.</span>
+    </b-modal>
   </b-container>
 </template>
 
@@ -9,7 +16,7 @@ export default {
   name: 'App',
   data () {
     return {
-      myTimer: {
+      timerSetting: {
         countDownDate: null,
         datePause: null,
         isStarted: false,
@@ -20,68 +27,72 @@ export default {
     }
   },
   sockets: {
-    wrongId () {
-      this.$router.push({name: 'Name'})
+    wrongId (msg) {
+      this.$store.dispatch('setDoneExercise', [])
+      this.$router.push({name: 'Home'})
       this.$cookie.delete('id')
+      this.$bvModal.show('modal-teamNotExist')
+    },
+    goodId (doneExercises) {
+      this.$store.dispatch('setDoneExercise', doneExercises)
     },
     chooseNameSuccess (team) {
-      this.$store.dispatch('doneExercise', team.exercise)
+      this.$store.dispatch('setDoneExercise', team.exercise)
       this.$cookie.set('id', team.id)
-      this.$router.push('main')
+      this.$router.push('game')
     },
     start (date) {
-      this.myTimer.countDownDate = date
-      this.myTimer.datePause = null
-      this.myTimer.isStarted = true
-      this.myTimer.isPaused = false
-      this.myTimer.isStop = false
-      this.myTimer.load = false
+      this.timerSetting.countDownDate = date
+      this.timerSetting.datePause = null
+      this.timerSetting.isStarted = true
+      this.timerSetting.isPaused = false
+      this.timerSetting.isStop = false
+      this.timerSetting.load = false
     },
     play (date) {
-      this.myTimer.countDownDate = date
-      this.myTimer.datePause = null
-      this.myTimer.isPaused = false
-      this.myTimer.load = false
+      this.timerSetting.countDownDate = date
+      this.timerSetting.datePause = null
+      this.timerSetting.isPaused = false
+      this.timerSetting.load = false
     },
     pause (date) {
-      this.myTimer.datePause = date
-      // this.myTimer.countDownDate = null
-      this.myTimer.isPaused = true
-      this.myTimer.load = false
+      this.timerSetting.datePause = date
+      this.timerSetting.isPaused = true
+      this.timerSetting.load = false
     },
     stop () {
-      this.myTimer.isStarted = false
-      this.myTimer.isPaused = false
-      this.myTimer.isStop = true
-      this.myTimer.countDownDate = null
-      this.myTimer.datePause = null
+      this.timerSetting.isStarted = false
+      this.timerSetting.isPaused = false
+      this.timerSetting.isStop = true
+      this.timerSetting.countDownDate = null
+      this.timerSetting.datePause = null
       if (this.$route.name !== 'Admin') {
         this.$router.push({name: 'finish'})
       }
-      this.myTimer.load = false
+      this.timerSetting.load = false
     },
     change  (date) {
-      this.myTimer.countDownDate = date
-      this.myTimer.load = false
+      this.timerSetting.countDownDate = date
+      this.timerSetting.load = false
     },
     restart () {
-      this.myTimer.isStop = false
-      this.myTimer.isStarted = false
-      this.myTimer.isPaused = false
-      this.myTimer.countDownDate = null
-      this.myTimer.datePause = null
+      this.timerSetting.isStop = false
+      this.timerSetting.isStarted = false
+      this.timerSetting.isPaused = false
+      this.timerSetting.countDownDate = null
+      this.timerSetting.datePause = null
       if (this.$route.name !== 'Admin') {
-        this.$router.push({name: 'Name'})
+        this.$router.push({name: 'Home'})
       }
       this.$cookie.delete('id')
-      this.myTimer.load = false
+      this.timerSetting.load = false
     },
     notStart () {
-      this.myTimer.isStop = false
-      this.myTimer.isStarted = false
-      this.myTimer.isPaused = false
-      this.myTimer.load = false
-      // this.myTimer.countDownDate = null
+      this.timerSetting.isStop = false
+      this.timerSetting.isStarted = false
+      this.timerSetting.isPaused = false
+      this.timerSetting.load = false
+      // this.timerSetting.countDownDate = null
     }
   }
 }

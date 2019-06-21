@@ -1,9 +1,7 @@
 <template>
     <div id="clock" class="light">
-      <div class="display">
+      <div class="display" style="min-width: 242px;">
         <div class="digits">
-          <!--<div v-for="digit in digit_holder" v-bind:class="digit.class" v-html="digit.val()">
-          </div>-->
         </div>
       </div>
     </div>
@@ -11,7 +9,7 @@
 
 <script>
 export default {
-  props: ['myTimer'],
+  props: ['timerSetting'],
   data () {
     return {
       digit_holder: '',
@@ -22,21 +20,21 @@ export default {
     }
   },
   watch: {
-    myTimer: {
+    timerSetting: {
       handler () {
-        if (this.myTimer.isStarted) {
-          if (this.myTimer.isPaused) {
-            this.update_time(this.myTimer.datePause)
+        if (this.timerSetting.isStarted) {
+          if (this.timerSetting.isPaused) {
+            this.update_time(this.timerSetting.datePause)
             clearInterval(this.interval)
           } else {
             this.interval = setInterval(this.myInterval, 1000)
           }
-        } else if (this.myTimer.isStop) {
+        } else if (this.timerSetting.isStop) {
           clearInterval(this.interval)
         } else {
           clearInterval(this.interval)
         }
-        this.myTimer.load = false
+        this.timerSetting.load = false
       },
       deep: true
     }
@@ -49,7 +47,7 @@ export default {
       // Find the distance between now and the count down date
     },
     update_time (date) {
-      const distance = this.myTimer.countDownDate - date
+      const distance = this.timerSetting.countDownDate - date
       // Time calculations for days, hours, minutes and seconds
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
@@ -89,7 +87,7 @@ export default {
   },
   mounted () {
     this.$socket.emit('getTimer')
-    this.myTimer.load = true
+    this.timerSetting.load = true
     this.createClock()
   },
   beforeDestroy () {

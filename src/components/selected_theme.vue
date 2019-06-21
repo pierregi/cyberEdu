@@ -1,17 +1,24 @@
 <template>
-  <div class="mx-3 my-4">
-    <h1 class="text-center my-4"><u>{{ theme.title }}</u></h1>
-    <div v-if="!isSubThemeSelected || biggerDoc">
-      <components
-        v-bind:is="theme.documentation"
-        v-bind:sideDoc="false"
-      />
-      <h2 v-if="!biggerDoc">Exercises :</h2>
-      <SubMenu v-if="!biggerDoc" v-bind:theme="name" v-bind:myTimer="myTimer" class="offset-1 col-5 col-xl-4 font-weight-bold" v-bind:select="true"/>
+  <div class="w-100 m-0 p-0">
+    <div v-if="!error" class="mx-3 my-4">
+      <h1 class="text-center my-4 text-primary"><u>{{ theme.title }}</u></h1>
+      <div v-if="!isSubThemeSelected || biggerDoc">
+        <components
+          v-bind:is="theme.documentation"
+          v-bind:windowWidth="windowWidth"
+          v-bind:sideDoc="false"
+        />
+        <h2 v-if="!biggerDoc" class="text-primary">Exercises :</h2>
+        <ul class="m-0 p-0 w-100">
+          <SubMenu v-if="!biggerDoc" v-bind:theme="name" v-bind:timerSetting="timerSetting" class="offset-1 col-5 col-xl-4 font-weight-bold" v-bind:select="true"/>
+        </ul>
+      </div>
+      <router-view v-if="!biggerDoc" v-bind:timerSetting="timerSetting"></router-view>
+      <font-awesome-icon class="buttonBigger" v-bind:icon="icon" v-if="isSubThemeSelected" @click="changeDoc"/>
     </div>
-    <router-view v-if="!biggerDoc"></router-view>
-    <font-awesome-icon class="buttonBigger" v-bind:icon="icon" v-if="isSubThemeSelected" @click="changeDoc"/>
+    <b-alert v-else variant="danger" class="my-3 w-100 text-center text-break" show>Could not load exercise from server</b-alert>
   </div>
+
 </template>
 <script>
 import SubMenu from '@/components/SubMenu'
@@ -21,7 +28,7 @@ const SQLDoc = () => import('@/components/docs/sql_doc')
 const JsDoc = () => import('@/components/docs/js_doc')
 
 export default {
-  props: ['name', 'myTimer'],
+  props: ['name', 'timerSetting', 'windowWidth'],
   data () {
     return {
       isSubThemeSelected: false,
@@ -54,18 +61,18 @@ export default {
       this.$emit('sideDoc', this.isSubThemeSelected && !this.biggerDoc)
       this.$resource('selectedTheme').get({ key: this.name }).then(
         (response) => {
+          this.error = false
           this.theme = response.data
           this.$emit('doc', this.theme.documentation)
         },
         (response) => {
-          console.error('error', response)
           this.error = true
         }
       )
     },
-    myTimer: {
+    timerSetting: {
       handler () {
-        if (!this.myTimer.isStarted || this.myTimer.isPaused) {
+        if (!this.timerSetting.isStarted) {
           this.$router.push({name: this.name})
         }
       },
@@ -81,7 +88,6 @@ export default {
         this.$emit('doc', this.theme.documentation)
       },
       (response) => {
-        console.error('error', response)
         this.error = true
       }
     )

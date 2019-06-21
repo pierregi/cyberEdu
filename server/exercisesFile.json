@@ -25,7 +25,7 @@
     {
       "refer": "caesar",
       "key": "caesar_cipher",
-      "subtitle": "Encipher",
+      "title": "Encipher",
       "point": 5,
       "description": "In this exercise, you will have to encipher the poem <i>A Fairy Song</i> by <u>William Shakespeare</u> with Caesar cipher technique. To encrypt, you will use a key of 15.",
       "exercise": {
@@ -36,7 +36,7 @@
     {
       "refer": "caesar",
       "key": "caesar_decipher",
-      "subtitle": "Decipher",
+      "title": "Decipher",
       "point": 5,
       "description": "In this exercise, you will have to decipher the following text which have been encrypted using the Caesar cipher technique and a key of 5",
       "exercise": {
@@ -47,7 +47,7 @@
     {
       "refer": "caesar",
       "key": "caesar_decrypt",
-      "subtitle": "Decrypt",
+      "title": "Decrypt",
       "point": 25,
       "description": "In this exercise, you will have to decrypt the following text that have been encrypt with Caesar cipher technique but we forgot the Key.",
       "exercise": {
@@ -58,7 +58,7 @@
     {
       "refer": "vigenere",
       "key": "vigenere_cipher",
-      "subtitle": "Encipher",
+      "title": "Encipher",
       "point": 10,
       "description": "In this exercise, you will have to encipher the poem <i>On My First Son</i> by <u>Ben Jonson</u> with Vigenère cipher technique.<br/>To encrypt, you will use the key \"VIGENERECIPHER\".",
       "exercise": {
@@ -69,7 +69,7 @@
     {
       "refer": "vigenere",
       "key": "vigenere_decipher",
-      "subtitle": "Decipher",
+      "title": "Decipher",
       "point": 10,
       "description": "In this exercise, you will have to decipher the following text which have been encrypted using Vigenère cipher technique and the key \"YOUBETTERDECRYPTME\"",
       "exercise": {
@@ -80,7 +80,7 @@
     {
       "refer": "vigenere",
       "key": "vigenere_decrypt",
-      "subtitle": "Decrypt",
+      "title": "Decrypt",
       "point": 50,
       "description": "In this exercise, you will have to decrypt the following text which have been encrypted using Vigenère cipher technique and a key of 3 to 8 characters",
       "exercise": {
@@ -91,7 +91,7 @@
     {
       "refer": "sql",
       "key": "sql_injection",
-      "subtitle": "SQL injection",
+      "title": "SQL injection",
       "point": 35,
       "description": "In this exercise you have to connect to the service using a SQL injection",
       "exercise": {
@@ -101,7 +101,7 @@
     {
       "refer": "js",
       "key": "xss_exercise",
-      "subtitle": "XSS",
+      "title": "XSS",
       "point": 40,
       "description": "In this exercise, you have to retrive a cookie which have been add to the admin page.<br/>A cookie is some data that are stock on the web browser by the web page to transfer data to an other page.<br/>For example when you connect an account in any site, a <span class='text-danger'>login cookie</span> is created. So when the web app needs to verify if your are connected, it sends the <span class='text-danger'>login cookie</span> to the server which verify it.<br/>To get your cookies, you can use <span class='text-primary'>document.cookie</span> syntax.",
       "exercise": {
@@ -112,34 +112,42 @@
   "subThemes_correction": [
     {
       "key": "caesar_cipher",
+      "recursiveCorrection": true,
       "answer": "DKTGWXAADKTGSPATIWDGDJVWQJHWIWDGDJVWQGXTGDKTGEPGZDKTGEPATIWDGDJVWUADDSIWDGDJVWUXGTXSDLPCSTGTKTGNLWTGTHLXUITGIWPCIWTBDDCHHEWTGTPCSXHTGKTIWTUPXGNFJTTCIDSTLWTGDGQHJEDCIWTVGTTCIWTRDLHAXEHIPAAWTGETCHXDCTGHQTXCIWTXGVDASRDPIHHEDIHNDJHTTIWDHTQTGJQXTHUPXGNUPKDJGHXCIWDHTUGTRZATHAXKTIWTXGHPKDJGHXBJHIVDHTTZHDBTSTLSGDEHWTGTPCSWPCVPETPGAXCTKTGNRDLHAXEHTPG"
     },
     {
       "key": "caesar_decipher",
+      "recursiveCorrection": true,
       "answer" : "HARKHARKTHELARKATHEAVENSGATESINGSANDPHOEBUSGINSARISEHISSTEEDSTOWATERATTHOSESPRINGSONCHALICEDFLOWERSTHATLIESANDWINKINGMARYBUDSBEGINTOOPETHEIRGOLDENEYESWITHEVERYTHINGTHATPRETTYBINMYLADYSWEETARISEARISEARISEAUBADEWILLIAMSHAKESPEARE"
     },
     {
       "key": "caesar_decrypt",
+      "recursiveCorrection": true,
       "answer" : "WHETHERITWASPUTTINGINANEXTRABEATORLEAVINGONEOUTICOULDNTTELLMYHEARTSEEMEDTOHAVEFORGOTTENEVERYTHINGITEVERKNEWABOUTTIMINGANDCOORDINATIONINITSEFFORTSTOGETTHROUGHTOSOMEONEONTHEOTHERSIDEOFAWALLASILAYINBEDICOULDHEARITHAMMERINGAWAYINSIDEMYPILLOWBEINGANSWEREDNOWANDTHENBYADISTANTGUITARNOTEOFBEDSPRINGSPAUSINGFORAMOMENTASIFLISTENINGTHENHURRYINGONASBEFOREUNOBTAINABLEHUGOWILLIAMS"
     },
     {
       "key": "vigenere_cipher",
+      "recursiveCorrection": true,
       "answer" : "AIXIJICPVPDBGYDTJSSQPVKOWALRILGRQNFCOGHPRNVAZSBQLGJPDWIFABNIRPFZGLQVCJZDKRLIRVUBWVYNZZZPRRKXQUTHRUDBNIRTRCGFPJXVYJEXUCWEVMDUXYZRAWGHRCQPRVYCYQRSFIRPNNPALVMVUASSIAJGLPPCHITPNQVRVBWLWKVBKLRWYSWTSLRMTBULNZVWQADVRJXIVIQAFVNLHHRUATKWUWIEIMPUHZAVUSGLVVOQHLVPTMZETIIIUBXUWFABVINGVEPLPZOVYAGCUIIIFWIOPZZJKRWSEWQVWPWSZAZTVITIQNEVIKMGLSEAYSUMHHOVCMTGRJFVVPPSPYDABSJWSIUCROEJRPGXUICSXMHTEPIMBIEPZOGBDVQLXP"
     },
     {
       "key": "vigenere_decipher",
+      "recursiveCorrection": true,
       "answer": "WEARILYDREARILYHALFTHEDAYLONGFLAPTHEGREATBANNERSHIGHOVERTHESTONESTRANGELYANDEERILYSOUNDSTHEWINDSSONGBENDINGTHEBANNERPOLESWHILEALLALONEWATCHINGTHELOOPHOLESSPARKLIEIWITHLIFEALLDARKFEETTETHERDHANDSFETTERDFASTTOTHESTONETHEGRIMWALLSSQUARELETTERDWITHPRISONDMENSGROANSTILLSTRAINTHEBANNERPOLESTHROUGHTHEWINDSSONGWESTWARDTHEBANNERROLLSOVERMYWRONGAGOODKNIGHTINPRISONWILLIAMMORRIS"
     },
     {
       "key": "vigenere_decrypt",
+      "recursiveCorrection": true,
       "answer": "WHOISSILVIAWHATISSHETHATALLOURSWAINSCOMMENDHERHOLYFAIRANDWISEISSHETHEHEAVENSUCHGRACEDIDLENDHERTHATSHEMIGHTADMIREDBEISSHEKINDASSHEISFAIRFORBEAUTYLIVESWITHKINDNESSLOVEDOTHTOHEREYESREPAIRTOHELPHIMOFHISBLINDNESSANDBEINGHELPDINHABITSTHERETHENTOSILVIALETUSSINGTHATSILVIAISEXCELLINGSHEEXCELSEACHMORTALTHINGUPONTHEDULLEARTHDWELLINGTOHERLETUSGARLANDSBRINGSILVIAWILLIAMSHAKESPEARE"
     },
     {
       "key": "sql_injection",
+      "recursiveCorrection": false,
       "answer": "P45SW0RD"
     },
     {
       "key": "xss_exercise",
+      "recursiveCorrection": false,
       "answer": "JAIEUBON"
     }
   ]

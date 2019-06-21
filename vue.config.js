@@ -1,4 +1,4 @@
-const webpack = require("webpack");
+/*const webpack = require("webpack");
 
 module.exports = {
 // The configure Web pack is the place in Vue CLI 3.0 to configure the parameters of the webpack plug-in. If you set it here, it will create or override the default configuration of the webpack.
@@ -13,4 +13,4 @@ module.exports = {
               })
         ]
       }
-}
+}*/

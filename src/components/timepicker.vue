@@ -1,26 +1,26 @@
 <template id="">
-  <div class="row" style="height: 75px" >
-    <div class="col-2 mr-2 p-0 text-center h-100">
+  <div class="d-flex" style="height: 75px" >
+    <div class="mr-2 p-0 text-center h-100" style="width: 25px">
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-up" @click="add('h1')" @mousedown="mouseDownHandler(add,'h1')" @mouseup="mouseUpHandler"/>
-      <input id="input1" class="h-50 m-0 p-0 col-12 text-center" type="text" v-model="h1" @click="nextInput(1)"/>
+      <input id="input1" class="h-50 m-0 p-0 w-100 text-center" type="text" v-model="h1" @click="nextInput(1)"/>
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-down" @click="sub('h1')" @mousedown="mouseDownHandler(sub,'h1')" @mouseup="mouseUpHandler"/>
     </div>
-    <div class="col-2 m-0 p-0 text-center h-100">
+    <div class="m-0 p-0 text-center h-100" style="width: 25px">
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-up" @click="add('h2')" @mousedown="mouseDownHandler(add,'h2')" @mouseup="mouseUpHandler"/>
-      <input id="input2" class="h-50 m-0 p-0 col-12 text-center" type="text" v-model="h2" @click="nextInput(2)"/>
+      <input id="input2" class="h-50 m-0 p-0 w-100 text-center" type="text" v-model="h2" @click="nextInput(2)"/>
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-down" @click="sub('h2')" @mousedown="mouseDownHandler(sub,'h2')" @mouseup="mouseUpHandler"/>
     </div>
-    <div class="m-0 p-0 col-2 h-100 d-flex align-items-center justify-content-center">
+    <div class="m-0 p-0h-100 d-flex align-items-center justify-content-center" style="width: 25px">
       <h1 class="m-0 p-0 align-middle">:</h1>
     </div>
-    <div class="col-2 mr-2 p-0 text-center h-100">
+    <div class="mr-2 p-0 text-center h-100" style="width: 25px">
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-up" @click="add('m1')" @mousedown="mouseDownHandler(add,'m1')" @mouseup="mouseUpHandler"/>
-      <input id="input3" class="h-50 m-0 p-0 col-12 text-center" type="text" v-model="m1" @click="nextInput(3)"/>
+      <input id="input3" class="h-50 m-0 p-0 w-100 text-center" type="text" v-model="m1" @click="nextInput(3)"/>
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-down" @click="sub('m1')" @mousedown="mouseDownHandler(sub,'m1')" @mouseup="mouseUpHandler"/>
     </div>
-    <div class="col-2 m-0 p-0 text-center h-100">
+    <div class="m-0 p-0 text-center h-100" style="width: 25px">
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-up" @click="add('m2')" @mousedown="mouseDownHandler(add,'m2')" @mouseup="mouseUpHandler"/>
-      <input id="input4" class="h-50 m-0 p-0 col-12 text-center" type="text" v-model="m2" @click="nextInput(4)"/>
+      <input id="input4" class="h-50 m-0 p-0 w-100 text-center" type="text" v-model="m2" @click="nextInput(4)"/>
       <font-awesome-icon class="h-25 m-0 p-0" icon="angle-down" @click="sub('m2')" @mousedown="mouseDownHandler(sub,'m2')" @mouseup="mouseUpHandler"/>
     </div>
   </div>

@@ -4,15 +4,17 @@
       <label for="login">Login :</label>
       <b-input
         id="login"
-        v-model="login">
+        v-model="login"
+        :disabled="timerSetting.isPaused">
       </b-input>
       <label for="password">Password :</label>
       <b-input
         id="password"
         v-model="password"
-        type="password">
+        type="password"
+        :disabled="timerSetting.isPaused">
       </b-input>
-      <b-button class="ml-auto mt-2" variant="primary" type="submit" style="width: 100px">Connect</b-button>
+      <b-button class="ml-auto mt-2" variant="primary" type="submit" :disabled="timerSetting.isPaused" style="width: 100px">Connect</b-button>
     </b-form>
     <b-alert
       v-if="msgConnection"
@@ -25,7 +27,7 @@
 
 <script>
 export default {
-  props: ['name', 'data'],
+  props: ['name', 'data', 'timerSetting'],
   data () {
     return {
       login: '',
@@ -54,7 +56,8 @@ export default {
           this.validate = response.data.validate
         },
         (response) => {
-          console.error('error', response)
+          this.msgConnection = 'Could not join the server'
+          this.validate = false
         }
       )
     }

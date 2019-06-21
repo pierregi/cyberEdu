@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-const Name = () => import('@/components/ChooseName')
-const Admin = () => import('@/components/Admin')
-const MainPage = () => import('@/components/Mainpage')
+const HomePage = () => import('@/components/HomePage')
+const AdminPage = () => import('@/components/AdminPage')
+const GamePage = () => import('@/components/GamePage')
 const Theme = () => import('@/components/selected_theme')
 const SubTheme = () => import('@/components/selected_sub_theme')
-const Finish = () => import('@/components/finish')
+const FinishPage = () => import('@/components/FinishPage')
 
 Vue.use(Router)
 
@@ -13,18 +13,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Name',
-      component: Name
+      name: 'Home',
+      component: HomePage
     },
     {
       path: '/admin',
       name: 'Admin',
-      component: Admin
+      component: AdminPage
     },
     {
-      path: '/main',
-      name: 'MainPage',
-      component: MainPage,
+      path: '/game',
+      name: 'GamePage',
+      component: GamePage,
       children: [
         {
           path: 'caesar',
@@ -108,18 +108,18 @@ export default new Router({
         },
         {
           path: '*',
-          redirect: {name: 'MainPage'}
+          redirect: {name: 'GamePage'}
         }
       ]
     },
     {
       path: '/finish',
       name: 'finish',
-      component: Finish
+      component: FinishPage
     },
     {
       path: '*',
-      redirect: {name: 'MainPage'}
+      redirect: {name: 'Home'}
     }
   ]
 })

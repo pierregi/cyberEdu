@@ -68,7 +68,7 @@ export default {
                   borderless: true
                 },
                 class: {
-                  'table-lg table-hover m-0': true
+                  'table-lg table-hover m-0 myTable': true
                 } /* ,
                 style: {
                   width: this.col + '%'
@@ -90,13 +90,13 @@ export default {
 }
 </script>
 <style media="screen">
-  .table tr {
+  .myTable tr {
     height: 75px;
     text-align: center;
     vertical-align: middle;
     font-size: 25px;
   }
-  .table > thead {
+  .myTable > thead {
     display:none !important;
   }
   .colorGold {

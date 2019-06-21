@@ -1,8 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import Vuex from 'vuex'
 import VueSocketIO from 'vue-socket.io'
+import io from 'socket.io-client'
 import VueResource from 'vue-resource'
 import VueCookie from 'vue-cookie'
 import App from './App'
@@ -16,18 +16,18 @@ import store from './store/Appstore'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-Vue.use(Vuex)
+window.$ = window.jQuery = require('jquery');
+
 Vue.use(VueCookie)
 Vue.use(BootstrapVue)
-library.add(faAngleUp, faAngleDown, faExpand, faCompress, faLightbulb)
+Vue.use(VueResource)
 
+library.add(faAngleUp, faAngleDown, faExpand, faCompress, faLightbulb)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-Vue.config.productionTip = false
-
 Vue.use(new VueSocketIO({
-  debug: true,
-  connection: 'http://localhost:3000',
+  debug: false,
+  connection: io(),// 'http://localhost:3000',
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
@@ -35,8 +35,8 @@ Vue.use(new VueSocketIO({
   }
 }))
 
-Vue.use(VueResource)
-Vue.http.options.root = 'http://localhost:3000/api'
+Vue.http.options.root = io('/api', { forceNew: true }).io.uri // 'http://localhost:3000/api'
+Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({

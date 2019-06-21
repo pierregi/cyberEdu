@@ -1,37 +1,99 @@
 var express = require('express');
 var app = express();
 var http = require('http').createServer(app);
-var io = require('socket.io')(http);
-var db = require('../db/db');
-var sql = require("mssql");
-var jsdom = require("jsdom");
-var serveStatic = require("serve-static");
-var { JSDOM } = jsdom;
 var path = require("path");
-//var serveStatic = require('serve-static');
-//const helmet = require('helmet')
+var io = require('socket.io')(http);
+var exercisesFile = require('./exercisesFile');
 
-//var __dirname = require("path").dirname(require.main.filename);
-app.use(express.static(path.join(__dirname, '../dist')));
-app.use(serveStatic("../dist"));
+var jsdom = require("jsdom");
+var { JSDOM } = jsdom;
+
+const JlSqlApi = require('jl-sql-api');
+const api = new JlSqlApi;
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
   res.setHeader('Access-Control-Allow-Credentials', true);
-
   next();
 })
 
+app.use(express.static(path.join(__dirname, './dist')));
 
-// config for your database
-var configDB = {
-    user: 'gabin',
-    password: 'gabin',
-    server: "PC-GABIN",
-    database: 'cyber_edu'
-};
+app.get('/api/themes', (req, res) => {
+  let response = exercisesFile.themes;
+  res.send(response);
+});
+
+app.get('/api/selectedTheme', (req, res) => {
+  let param = Object.entries(req.query);
+  let response = exercisesFile.themes.find(obj => obj[param[0][0]]===param[0][1]);
+  res.send(response);
+});
+
+app.get('/api/subThemes', (req, res) => {
+  let response = exercisesFile.subThemes.filter(obj => {
+    let res = true;
+    for(key in req.query){
+      res = res && req.query[key] === obj[key];
+    }
+    return res;
+  });
+  res.send(response.map(obj => ({key: obj.key, title: obj.title, point: obj.point})));
+});
+app.get('/api/exercise', (req, res) => {
+  let param = Object.entries(req.query);
+  let response = exercisesFile.subThemes.find(obj => obj[param[0][0]]===param[0][1]);
+  res.send(response);
+});
+
+app.get('/api/sql_injection', (req, res) => {
+  var result={};
+  try {
+    var myQuery = "SELECT * WHERE login ='"+req.query.login+"' and password = '"+req.query.password+"'";
+
+    myQuery = myQuery.split(';--')[0]
+console.log(myQuery);
+    api.query(myQuery)
+    .fromArrayOfObjects([
+      {"login": 'user1', "password": 'GjdyOnvpa'},
+      {"login": 'user2', "password": 'qvua884wx'},
+      {"login": 'user3', "password": 'svhCsqdi9'},
+      {"login": 'admin', "password": '87Dqd7qd6'},
+    ])
+    .toArrayOfObjects((recordset) => {
+      if(Object.keys(recordset).length>0){
+        // send records as a response
+        result.msg= "You successfully connected as "+recordset[0].login;
+        result.password= "P45SW0RD";
+        result.validate= true
+        res.send(result);
+      }else{
+        result.validate=false;
+        result.msg="Wrong login or password !";
+        res.send(result);
+      }
+    })
+
+  }
+  catch(error) {
+    result.validate=false;
+    result.msg="Error on the database";
+    res.send(result);
+  }
+
+
+})
+
+app.use(function(req, res, next) {
+    res.status(404).send("Sorry, this page does not exist.");
+});
+
+http.listen(3000, () => {
+  console.log('listening on *:3000');
+});
+
 
 var endTimer = null,
     interval,
@@ -52,109 +114,77 @@ var timer = function (){
   }
 }
 
-sql.connect(configDB, function (err) {
-  if (err) console.log(err);
-});
-app.use(express.static(__dirname));
-app.use(serveStatic(__dirname + "../dist"));
-
-/*
-app.get('/', (req, res) => {
-  res.sen('coucou');
-  res.sendFile('index.html');
-})
-*/
-app.get('/api/themes', (req, res) => {
-  let response = db.themes;
-  res.send(response);
-});
-
-app.get('/api/selectedTheme', (req, res) => {
-  let param = Object.entries(req.query);
-  let response = db.themes.find(obj => obj[param[0][0]]===param[0][1]);
-  res.send(response);
-});
-
-app.get('/api/subThemes', (req, res) => {
-  let response = db.subThemes.filter(obj => {
-    let res = true;
-    for(key in req.query){
-      res = res && req.query[key] === obj[key];
-    }
-    return res;
-  });
-  res.send(response.map(obj => ({key: obj.key,subtitle: obj.subtitle, point: obj.point})));
-});
-app.get('/api/exercise', (req, res) => {
-  let param = Object.entries(req.query);
-  let response = db.subThemes.find(obj => obj[param[0][0]]===param[0][1]);
-  res.send(response);
-});
-
-app.get('/api/sql_injection', (req, res) => {
-  var result={};
-  // create Request object
-  var request = new sql.Request();
-  // query to the database and get the records
-  var myRequest = 'select * from users where login=\''+req.query.login+'\' and password=\''+req.query.password+'\';';
-  request.query(myRequest)
-  .catch((err) => {
-    // result.msg="Error in the database";
-    result.msg = "Error in the database<br/>" + err;
-    result.validate = false;
-    res.send(result);
-  })
-  .then((recordset) => {
-    if(recordset.rowsAffected>0){
-      // send records as a response
-      result.msg= "You successfully connected as "+recordset.recordset[0].login;
-      result.password= "P45SW0RD";
-      result.validate= true
-    }else{
-      result.validate=false;
-      result.msg="Wrong login or password !";
-    }
-    res.send(result);
-  })
-})
-
 io.on('connection', function(socket){
   var team = null;
 
   socket.on("exercise", function(msg){
-    var result={};
+    var result = {};
     if(team == null)
     {
       socket.emit('wrongId');
     }
+    else if (endTimer === null) {
+      result.variant='warning';
+      result.validate=false;
+      result.msg="The game is not started";
+    }
+    else if (isPaused) {
+      result.variant='warning';
+      result.validate=false;
+      result.msg="The game is paused";
+    }
+    else if (isStop) {
+      result.variant='warning';
+      result.validate=false;
+      result.msg="The game is finished";
+    }
     else if(team.exercise.indexOf(msg.exercise)!=-1){
       result.variant='warning';
       result.validate=false;
-      result.msg="Already done";
+      result.msg="You have already done this exercise and you can't earn points twice with it.";
     }
-    else if(msg.answer.toUpperCase().replace(/\W/g,"")===db.subThemes_correction.find(obj => obj.key === msg.exercise).answer){
+    else if (exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).recursiveCorrection) {
+      let answer = msg.answer.toUpperCase().replace(/\W/g,"")
+      let correction = exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).answer;
+      let errorCount = answer.length > correction.length ? answer.length - correction.length : correction.length - answer.length
+      for(let i = 0; i < Math.min(answer.length, correction.length); i++) {
+        errorCount = answer[i] !== correction[i] ? errorCount + 1 : errorCount
+      }
+      if (errorCount === 0) {
+        result.validate = true
+      } else {
+        result.validate = false
+        result.msg=`There were ${errorCount} mismatch between your answer and the correction so try again, you will do better.`;
+        result.variant='danger';
+      }
+    }else {
+      if(msg.answer.toUpperCase().replace(/\W/g,"")===exercisesFile.subThemes_correction.find(obj => obj.key === msg.exercise).answer) {
+        result.validate = true
+      } else {
+        result.validate = false
+        result.msg="Try again.";
+        result.variant='danger';
+      }
+    }
+    if(result.validate){
       team.exercise.push(msg.exercise);
       result.variant='success';
       result.validate=true;
-      result.msg="Good job, you earn "+db.subThemes.find(obj => obj.key === msg.exercise).point+" points.";
-      team.point+=db.subThemes.find(obj => obj.key === msg.exercise).point;
+      result.msg="Good job, you earn "+exercisesFile.subThemes.find(obj => obj.key === msg.exercise).point+" points.";
+      team.point+=exercisesFile.subThemes.find(obj => obj.key === msg.exercise).point;
       let i=1;
       io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
-    }
-    else{
-      result.variant='danger';
-      result.validate=false;
-      result.msg="Try again.";
     }
     socket.emit("exercise",result);
   });
 
+
   socket.on('choose name', (msg) => {
     var id=randomId();
-    teams.push({id,name:msg.name,point:0,exercise:[]});
+    teams.push({id, name: msg.name, point: 0, exercise: [], socketId: socket.id});
     team=teams.find(obj => {return obj.id === id});
     connection(socket, team);
-    });
+  });
 
   socket.on('chosenName', (msg) => {
     if(msg.password===password){
@@ -162,14 +192,10 @@ io.on('connection', function(socket){
       if(team!=null)
         connection(socket, team);
       else
-        socket.emit('listName', {teams,rep: "This team don't exist"});
+        socket.emit('listName', {rep: "This team don't exist"});
     }else{
-      socket.emit('listName', {teams,rep: "Wrong password !"});
+      socket.emit('listName', {rep: "Wrong password !"});
     }
-  });
-
-  socket.on('chooseExistingName', (msg) => {
-    socket.emit('listName', {teams: teams,rep: ""});
   });
 
   socket.on('scoreBoard', (msg) => {
@@ -183,14 +209,19 @@ io.on('connection', function(socket){
       socket.emit('wrongId');
     }else{
       team = teams.find(obj => {return obj.id === msg});
+      team.socketId = socket.id
       socket.emit('goodId', team.exercise);
     }
   });
 
   socket.on('deletTeam', (id) => {
-    teams.splice(teams.findIndex( obj => obj.id = id ), 1)
+    const deletedTeamIndex = teams.findIndex( obj => obj.id = id )
+    const deletedTeam = teams[deletedTeamIndex]
+    const socketId = deletedTeam.socketId
+    io.sockets.sockets[socketId].emit('wrongId')
+    teams.splice(deletedTeamIndex, 1)
     let i = 1;
-    socket.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
+    io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
   });
 
   socket.on('message', (msg) => {
@@ -204,7 +235,7 @@ io.on('connection', function(socket){
         <html>
           <head>
             <script>
-              document.cookie='you can validate with password=`+db.subThemes_correction.find(obj => obj.key === 'xss_exercise').answer+`';
+              document.cookie='you can validate with password=`+exercisesFile.subThemes_correction.find(obj => obj.key === 'xss_exercise').answer+`';
               var send = function (event){
                   var div = document.createElement('div');
                   div.innerHTML = '<strong>admin :</strong> '+document.getElementById('content').value;
@@ -268,7 +299,7 @@ io.on('connection', function(socket){
       isPaused = false;
       isStop = false;
       io.emit("restart");
-      rep = {msg: "Restart", variant: "success"};
+      rep = {msg: "The game has been restarted with success and all data have been deleted", variant: "success"};
     } else {
       rep = {msg: "Wrong password", variant:"danger"};
     }
@@ -284,9 +315,9 @@ io.on('connection', function(socket){
         setEndDate(msg.duration);
         io.emit('start', endTimer.getTime());
         interval = setInterval(timer, 1000);
-        rep = {msg: "Started", variant: "success"};
+        rep = {msg: "The game has started", variant: "success"};
       }else{
-        rep = {msg: "Already started", variant: "warning"};
+        rep = {msg: "The timer has already been started", variant: "warning"};
       }
     } else {
       rep = {msg: "Wrong password", variant: "danger"};
@@ -302,9 +333,9 @@ io.on('connection', function(socket){
         isStop = true;
         endTimer = null;
         io.emit("stop");
-        rep = {msg: "Stoped", variant: "success"};
+        rep = {msg: "The game has been stoped with success", variant: "success"};
       }else{
-        rep = {msg: "Not started", variant: "warning"};
+        rep = {msg: "The timer is not started and so you can not stop it", variant: "warning"};
       }
     } else {
       rep = {msg: "Wrong password", variant: "danger"};
@@ -321,12 +352,12 @@ io.on('connection', function(socket){
           paused = new Date();
           clearInterval(interval);
           io.emit("pause", paused.getTime());
-          rep = {msg: "Paused", variant: "success"};
+          rep = {msg: "The game has been paused with success", variant: "success"};
         }else{
           rep = {msg: "Already paused", variant: "warning"};
         }
       } else {
-        rep = {msg: "Not started", variant: "warning"};
+        rep = {msg: "The timer is not started and so can not be paused", variant: "warning"};
       }
     } else {
       rep = {msg: "Wrong password", variant: "danger"};
@@ -344,12 +375,12 @@ io.on('connection', function(socket){
           paused = null;
           interval = setInterval(timer, 1000);
           io.emit("play", endTimer.getTime());
-          rep = {msg: "Play", variant: "success"};
+          rep = {msg: "The game in now running back", variant: "success"};
         }else{
-          rep = {msg: "Not paused", variant: "warning"};
+          rep = {msg: "The timer is not in pause and so you can not unpaused it", variant: "warning"};
         }
       }else{
-        rep = {msg: "Not started", variant: "warning"};
+        rep = {msg: "The timer is not started and so you can not unpaused it", variant: "warning"};
       }
     } else {
       rep = {msg: "Wrong password", variant: "danger"};
@@ -367,13 +398,13 @@ io.on('connection', function(socket){
           endTimer = null;
           isStop = true;
           io.emit("stop");
-          rep = {msg: "Stop", variant: "success"};
+          rep = {msg: "The game have been stop as you send ", variant: "success"};
         } else {
           io.emit('change', endTimer.getTime());
-          rep = {msg: "Changed", variant: "success"};
+          rep = {msg: "Timer has been changed", variant: "success"};
         }
       } else {
-        rep = {msg: "Not started", variant: "warning"};
+        rep = {msg: "The timer is not started", variant: "warning"};
       }
     } else {
       rep = {msg: "Wrong password", variant: "danger"};
@@ -387,15 +418,12 @@ io.on('connection', function(socket){
 });
 
 
-http.listen(3000, () => {
-  console.log('listening on *:3000');
-});
 
-
+/*
 app.get('*', (req, res) => {
-  console.log("404");
   res.send("404");
 });
+*/
 
 function setEndDate(obj){
   var myNow =  new Date();
@@ -406,6 +434,7 @@ function setEndDate(obj){
 function connection(socket, team) {
   let i = 1;
   io.emit("scoreBoard",teams.sort(function(a, b){return b.point - a.point}).map((obj) => {return {placement: i++, name: obj.name, id: obj.id, point: obj.point}}));
+  team.socketId = socket.id
   socket.emit("chooseNameSuccess", team);
   /*
   if(isPaused) {

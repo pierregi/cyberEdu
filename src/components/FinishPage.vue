@@ -21,10 +21,9 @@
         </b-col>
 
         <b-col cols="4" class="m-0 p-0 h-100 d-flex flex-column align-items-center justify-content-end" style="background-color: #ffce4d; ">
-
+          <span class="p-0 m-0 crowned icon position-absolute" style="top: 5%">👑</span>
           <div class="p-0 my-auto d-flex align-items-center justify-content-center" style=" width: 90%; position: relative;  text-align: center;">
             <img src="@/assets/couroneGold.svg" alt="" class="img-fluid LaurelWreath">
-            <span class="p-0 m-0 crowned icon">👑</span>
             <h1 class="m-0 text-break text-center font-weight-bold text-light centered" style="width: 70%">{{ typeof teams[0] !== 'undefined' ? teams[0].name : '' }}</h1>
           </div>
           <div class="w-100 m-0 p-0" style="height:10px"></div>
@@ -105,8 +104,8 @@ export default {
     font-size: 7vmin;
   }
   .LaurelWreath {
-    max-height: 90%;
-    max-width: 90%;
+
+    max-height: 25vmin;
   }
   .points {
     font-size: 4vmin;

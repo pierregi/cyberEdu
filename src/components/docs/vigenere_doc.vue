@@ -1,9 +1,9 @@
 <template id="">
   <div class="text-justify">
-    <h2>Documentation</h2>
+    <h2 class="text-danger">Documentation</h2>
     <p class="indent">The Vigenère cipher is a method of encrypting alphabetic text by using a series of interwoven Caesar ciphers, based on the letters of a keyword.</p>
     <div class="my-4">
-      <h3>Encipher step</h3>
+      <h3 class="text-danger">Encipher step</h3>
       <p class="indent">
         In the first one, you choose a keyword or a sentence that will be your key.<br/>
         In second, you take your key and repeat it so it will be the same longer as the message.<br/>
@@ -11,25 +11,25 @@
       </p>
     </div>
     <div class="my-4">
-      <h3>Example</h3>
-      <p>Message : 'You are on cyber-edu'</p>
+      <h3 class="text-info">Example :</h3>
+      <p>Message : <span class="text-success">"You are on cyber-edu"</span></p>
       <div class="ml-3">
-        <h5 class="mb-4">1) We choose "MYMESSAGE" as key</h5>
+        <h5 class="mb-4">1) We choose <span class="text-warning">"MYMESSAGE"</span> as key</h5>
         <div class="mb-4">
           <h5>2) We repeat it until it has the same length as the message.</h5>
             <div class="card mx-5 my-3 p-2 w-auto text-monospace border bg-white border-secondary">
               <table class="w-100 m-0 bg-white text-center text-break" style="letter-spacing: 2px; font-size: 20px;">
                 <tr class="border-bottom border-secondary">
                   <th class="p-2 border-right border-secondary">Message</th>
-                  <td class="p-2 border-right border-secondary text-monospace">Youareonc</td>
-                  <td class="p-2 border-right border-secondary text-monospace">yberedu</td>
+                  <td class="p-2 border-right border-secondary text-monospace text-success">Youareonc</td>
+                  <td class="p-2 border-right border-secondary text-monospace text-success">yberedu</td>
                   <td></td>
                 </tr>
                 <tr>
                   <th class="p-2 border-right border-secondary">Key</th>
-                  <td class="p-2 border-right border-secondary text-monospace">MYMESSAGE</td>
-                  <td class="p-2 border-right border-secondary text-monospace">MYMESSA</td>
-                  <td class="p-2 text-monospace">GE</td>
+                  <td class="p-2 border-right border-secondary text-monospace text-warning">MYMESSAGE</td>
+                  <td class="p-2 border-right border-secondary text-monospace text-warning">MYMESSA</td>
+                  <td class="p-2 text-monospace ">GE</td>
                 </tr>
               </table>
           </div>
@@ -37,19 +37,19 @@
         <div class="mb-4">
           <h5 class="mb-3">3) We add the message and the repeated key together to create the cipher.</h5>
           <p class="mx-5 my-3  p-2 w-auto text-monospace border bg-white border-secondary text-center rounded font-weight-bold" style="font-size: 23px">
-            &nbsp; You are on cyber-edu<br/>
-                 + MYM ESS AG EMYME SSA<br/>
+            &nbsp; <span class="text-success">You are on cyber-edu</span><br/>
+                 + <span class="text-warning">MYM ESS AG EMYME SSA</span><br/>
             &nbsp; ↓↓↓ ↓↓↓ ↓↓ ↓↓↓↓↓ ↓↓↓<br/>
-            &nbsp; Kmg ejw ot gkzqv-wvu
+            &nbsp; <span class="text-primary">Kmg ejw ot gkzqv-wvu</span>
           </p>
-          <p  class="mx-5">The cipher is &Lt; Kmg ejw ot gkzqv-wvu &Gt;</p>
+          <p  class="mx-5">The cipher is <span class="text-primary">"Kmg ejw ot gkzqv-wvu"</span></p>
         </div>
       </div>
     </div>
     <div class="my-4">
-      <h3>Decryption step</h3>
+      <h3 class="text-danger">Decryption step</h3>
       <div class="ml-3">
-        <h5>1) First step : Kasiski examination</h5>
+        <h5 class="text-info">1) First step : Kasiski examination</h5>
         <p class="my-3 indent">In the first one, you have to find the key length. For that you can use the "Kasiski examination" which use the fact that repeated word can be encrypted with the same key letters and leading the cipher to be repeated.</p>
         <div class="mx-5 my-3  p-2 border bg-white border-secondary rounded">
           <div class="row m-0 p-0 h-auto justify-content-between">
@@ -72,7 +72,7 @@
         <p class="my-3 indent">
           We can now take the intersection and deduce that the key should be 3 long because with a key of 1 long it would be a simple caesar cipher.
         </p>
-        <h5>2) Second step</h5>
+        <h5 class="text-info">2) Second step</h5>
         <p class="my-3 indent">In second step, you have to do a frequency analysis. Before that we have to separate letters of the text on group where they have been encrypt with the same key letter.</p>
         <div class="mx-5 my-3 p-2 border bg-white border-secondary rounded">
           <b-row
@@ -94,77 +94,20 @@
           </b-row>
         </div>
         <p class="my-3 indent">Now, you can analyze the frequency of letter distribution for each group. You will count how many time each letters are present in each group to compare it with the english one and try to find the offset off each group.</p>
-        <h5>3) Last step</h5>
+        <h5 class="text-info">3) Last step</h5>
         <p class="my-3 indent">In the previous step, you have find the offset for each group. Now, you can decipher using the the good offset for each group.</p>
-        <h5><u>English frequency analysis : </u></h5>
-        <b-row>
-          <div
-            class="px-2"
-            v-bind:class="{'col-12 col-lg-6': true, 'col-xl-3': !sideDoc}"
-            v-for="subTab in frequency.items">
-            <b-table
-              small
-              striped bordered hover :fields="frequency.fields" :items="subTab">
-            </b-table>
-          </div>
-        </b-row>
+        <Frequency :sideDoc="sideDoc"/>
       </div>
     </div>
   </div>
 </template>
 <script>
+import Frequency from '@/components/docs/frequency'
+
 export default {
   props: ['sideDoc'],
   data () {
     return {
-      frequency: {
-        fields: [
-          {
-            key: 'letter',
-            variant: 'col-4'
-          },
-          {
-            key: 'fequency_(%)',
-            variant: 'col-8'
-          }
-        ],
-        items: [
-          [
-            {letter: 'e', 'fequency_(%)': 12.702},
-            {letter: 't', 'fequency_(%)': 9.056},
-            {letter: 'a', 'fequency_(%)': 8.167},
-            {letter: 'o', 'fequency_(%)': 7.507},
-            {letter: 'i', 'fequency_(%)': 6.966},
-            {letter: 'n', 'fequency_(%)': 6.749},
-            {letter: 's', 'fequency_(%)': 6.327}
-          ],
-          [
-            {letter: 'h', 'fequency_(%)': 6.094},
-            {letter: 'r', 'fequency_(%)': 5.987},
-            {letter: 'd', 'fequency_(%)': 4.253},
-            {letter: 'l', 'fequency_(%)': 4.025},
-            {letter: 'c', 'fequency_(%)': 2.782},
-            {letter: 'u', 'fequency_(%)': 2.758},
-            {letter: 'm', 'fequency_(%)': 2.406}
-          ],
-          [
-            {letter: 'w', 'fequency_(%)': 2.36},
-            {letter: 'f', 'fequency_(%)': 2.228},
-            {letter: 'g', 'fequency_(%)': 2.015},
-            {letter: 'y', 'fequency_(%)': 1.974},
-            {letter: 'p', 'fequency_(%)': 1.929},
-            {letter: 'b', 'fequency_(%)': 1.492},
-            {letter: 'v', 'fequency_(%)': 0.978}
-          ],
-          [
-            {letter: 'k', 'fequency_(%)': 0.772},
-            {letter: 'j', 'fequency_(%)': 0.153},
-            {letter: 'x', 'fequency_(%)': 0.15},
-            {letter: 'q', 'fequency_(%)': 0.095},
-            {letter: 'z', 'fequency_(%)': 0.074}
-          ]
-        ]
-      },
       cipher: [
         {
           title: 'Encipher with 1st letter',
@@ -205,7 +148,6 @@ export default {
       return this.step2[i][tag][this.sideDoc ? 'sideDoc' : 'fullDoc'][attribute]
     },
     size () {
-      console.log(document.getElementById('cipherText').clientWidth)
       this.cipherWidth = document.getElementById('cipherText').clientWidth
       this.box = document.getElementById('cipherTextParent').clientWidth - this.cipherWidth - 1
     }
@@ -217,6 +159,9 @@ export default {
   },
   beforeDestroy () {
     window.addEventListener('resize', this.size)
+  },
+  components: {
+    Frequency
   }
 
 }
